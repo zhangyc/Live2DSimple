@@ -211,7 +211,7 @@ public final class LAppModel extends L2DBaseModel {
 
         // ドラッグによる目の向きの調整
         live2DModel.addToParamFloat(L2DStandardID.PARAM_EYE_BALL_X, dragX, 1); // -1から1の値を加える
-        live2DModel.addToParamFloat(L2DStandardID.PARAM_EYE_BALL_Y, dragY, 1);
+        live2DModel.addToParamFloat(L2DStandardID.PARAM_EYE_BALL_Y, dragY, 1);  //通过拖动来调整眼睛方向
 
         // 呼吸など
         live2DModel.addToParamFloat(L2DStandardID.PARAM_ANGLE_X, (float) (15 * Math.sin(t / 6.5345)), 0.5f);

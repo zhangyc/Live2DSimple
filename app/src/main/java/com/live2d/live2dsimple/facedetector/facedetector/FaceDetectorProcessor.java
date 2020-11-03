@@ -69,7 +69,12 @@ public class FaceDetectorProcessor extends VisionProcessorBase<List<Face>> {
     detector = FaceDetection.getClient(options);
     this.context=context;
   }
-
+  public FaceDetectorProcessor(Context context, FaceDetectorOptions options) {
+    super(context);
+    Log.v(MANUAL_TESTING_LOG, "Face detector options: " + options);
+    detector = FaceDetection.getClient(options);
+    this.context=context;
+  }
   @Override
   public void stop() {
     super.stop();
@@ -96,7 +101,7 @@ public class FaceDetectorProcessor extends VisionProcessorBase<List<Face>> {
       setFace(face);
       graphicOverlay.add(new FaceGraphic(graphicOverlay, face));
       logExtrasForTesting(face);
-      updateLive2dView(face);
+      //updateLive2dView(face);
     }
   }
   Random random=new Random();
