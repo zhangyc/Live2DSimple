@@ -34,7 +34,7 @@ public class L2DBaseModel {
     protected boolean updating = false;           // 読み込み中ならtrue
     protected float alpha = 1;                    // 透明度
     protected float accAlpha = 0;                 // 透明度の増え幅
-    protected boolean lipSync = false;            // リップシンクが有効かどうか
+    protected boolean lipSync = false;            // リップシンクが有効かどうか是否启用口型同步
     protected float lipSyncValue;                 // 基本は0～1
 
     // 傾きの値。-1から1の範囲

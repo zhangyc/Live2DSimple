@@ -18,6 +18,7 @@ import java.util.ArrayList;
 
 /*
  * パーツの切り替えを管理する。
+ * 管理零件切换。
  *
  */
 public final class L2DPose {
@@ -245,6 +246,7 @@ public final class L2DPose {
  * パーツインデックスを保持するクラス。
  * パーツにはパーツIDとモーションから設定するパーツパラメータIDがある。
  * 文字列で設定することもできるが、インデックスを取得してから設定したほうが高速。
+ * *包含零件索引的类。 *零件具有通过运动设置的零件ID和零件参数ID。 *您可以使用字符串进行设置，但是获取索引后设置起来更快。
  */
 final class L2DPartsParam {
     int paramIndex = -1;

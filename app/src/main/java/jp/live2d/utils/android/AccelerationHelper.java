@@ -7,6 +7,7 @@
 package jp.live2d.utils.android;
 
 import android.app.Activity;
+import android.content.Context;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -14,6 +15,8 @@ import android.hardware.SensorManager;
 import android.os.Build;
 import android.view.Display;
 import android.view.Surface;
+import android.view.WindowManager;
+
 import jp.live2d.util.UtSystem;
 
 /*
@@ -31,7 +34,7 @@ public final class AccelerationHelper {
     private float last_dst_acceleration_z = 0;
     private float lastMove = 0;
     private long lastTimeMSec = -1;
-    private final Activity activity;
+    private final Context activity;
     private final Sensor accelerometer;
     private final Sensor magneticField;
     private final MySensorListener sensorListener;
@@ -41,7 +44,7 @@ public final class AccelerationHelper {
     private final float[] acceleration = new float[3];
     private boolean sensorReady;
 
-    public AccelerationHelper(Activity activity) {
+    public AccelerationHelper(Context activity) {
         sensorListener = new MySensorListener();
         sensorManager = (SensorManager) activity.getSystemService(Activity.SENSOR_SERVICE);
 
@@ -104,9 +107,11 @@ public final class AccelerationHelper {
      * @param act
      * @return
      */
-    private int getDispRotation(Activity act) {
-        Display d = act.getWindowManager().getDefaultDisplay();
-        return DisplayRotateGetter.getInstance().getRotate(d);
+    private int getDispRotation(Context act) {
+        Display display = ((WindowManager) act.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay();
+
+//        Display d = act.getWindowManager().getDefaultDisplay();
+        return DisplayRotateGetter.getInstance().getRotate(display);
     }
 
     /*
@@ -275,6 +280,7 @@ public final class AccelerationHelper {
 
                 SensorManager.getRotationMatrix(R, I, accelerometerValues, geomagneticMatrix);
                 //  画面の回転状態を取得する
+
                 int dr = getDispRotation(activity);
                 float x = 0;
                 float y = 0;

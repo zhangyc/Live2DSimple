@@ -42,7 +42,7 @@ public final class LAppView extends GLSurfaceView {
     private AccelerationHelper AccelerationHelper; // 加速度センサの制御
     private TouchManager touchMgr; // ピンチなど
     /*
-     * Gestureの補助クラス。
+     * Gestureの補助クラス。手势辅助类。
      */
     private final SimpleOnGestureListener simpleOnGestureListener = new SimpleOnGestureListener() {
         @Override
@@ -70,8 +70,17 @@ public final class LAppView extends GLSurfaceView {
             return super.onSingleTapUp(event);
         }
     };
-    private L2DTargetPoint dragMgr; // ドラッグによるアニメーションの管理
-    private GestureDetector gestureDetector;
+
+    public L2DTargetPoint getDragMgr() {
+        return dragMgr;
+    }
+
+    public void setDragMgr(L2DTargetPoint dragMgr) {
+        this.dragMgr = dragMgr;
+    }
+
+    private L2DTargetPoint dragMgr; // ドラッグによるアニメーションの管理  拖动管理
+    private GestureDetector gestureDetector; ///手势检测器
 
     public LAppView(Context context) {
         super(context);
@@ -86,7 +95,7 @@ public final class LAppView extends GLSurfaceView {
 
         gestureDetector = new GestureDetector(this.getContext(), simpleOnGestureListener);
 
-        // デバイス座標からスクリーン座標に変換するための
+        // デバイス座標からスクリーン座標に変換するための  从设备坐标转换为屏幕坐标
         deviceToScreen = new L2DMatrix44();
 
         // 画面の表示の拡大縮小や移動の変換を行う行列
@@ -101,16 +110,19 @@ public final class LAppView extends GLSurfaceView {
 
         // タッチ関係のイベント管理
         touchMgr = new TouchManager();
-        dragMgr = new L2DTargetPoint();
+        dragMgr = L2DTargetPoint.getInstance();
+        setDragMgr(dragMgr);
     }
 
-    public final void startAcceleration(Activity activity) {
+    public final void startAcceleration(Context activity) {
         // 加速度関係のイベント
         AccelerationHelper = new AccelerationHelper(activity);
     }
 
     /*
      * タッチイベント。
+     * 重写触摸事件
+     * 触摸事件的坐标转换是怎么坐的呢
      */
     @Override
     public final boolean onTouchEvent(@NotNull MotionEvent event) {
@@ -123,7 +135,7 @@ public final class LAppView extends GLSurfaceView {
                 touchNum = event.getPointerCount();
 
                 if (touchNum == 1) {
-                    touchesBegan(event.getX(), event.getY());
+                    touchesBegan(event.getX(), event.getY());//只有一个手指，那就直接取这个手指的x，y坐标
                 } else if (touchNum == 2) {
                     touchesBegan(event.getX(0), event.getY(0), event.getX(1), event.getY(1));
                 }
@@ -185,8 +197,8 @@ public final class LAppView extends GLSurfaceView {
     }
 
     public final void update() {
-        dragMgr.update(); // ドラッグ用パラメータの更新
-        delegate.setDrag(dragMgr.getX(), dragMgr.getY());
+        dragMgr.update(); // ドラッグ用パラメータの更新    更新目标点
+        delegate.setDrag(dragMgr.getX(), dragMgr.getY());  ///获取xy
 
         AccelerationHelper.update();
 
@@ -244,13 +256,13 @@ public final class LAppView extends GLSurfaceView {
     }
 
     /*
-     * タッチを開始したときのイベント
+     * タッチを開始したときのイベント开始触摸时的事件
      */
     private void touchesBegan(float p1x, float p1y) {
         if (LAppDefine.DEBUG_TOUCH_LOG)
             Log.v(TAG, "touchesBegan " + " x:" + p1x + " y:" + p1y);
         touchMgr.touchBegan(p1x, p1y);
-
+        //设备坐标转换为视图
         float x = transformDeviceToViewX(touchMgr.getX());
         float y = transformDeviceToViewY(touchMgr.getY());
 
@@ -302,7 +314,7 @@ public final class LAppView extends GLSurfaceView {
         // 画面の拡大縮小、移動の設定
         float dx = touchMgr.getDeltaX() * deviceToScreen.getScaleX();
         float dy = touchMgr.getDeltaY() * deviceToScreen.getScaleY();
-        float cx = deviceToScreen.transformX(touchMgr.getCenterX()) * touchMgr.getScale();
+        float cx = deviceToScreen.transformX(touchMgr.getCenterX()) * touchMgr.getScale();///获取触摸点的位置
         float cy = deviceToScreen.transformY(touchMgr.getCenterY()) * touchMgr.getScale();
         float scale = touchMgr.getScale();
 
@@ -314,11 +326,12 @@ public final class LAppView extends GLSurfaceView {
         float x = transformDeviceToViewX(touchMgr.getX());
         float y = transformDeviceToViewY(touchMgr.getY());
 
+
         dragMgr.set(x, y);
     }
 
     /*
-     * タッチを終了したときのイベント
+     * タッチを終了したときのイベント触摸结束时的事件
      * @param event
      */
     private void touchesEnded() {

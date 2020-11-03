@@ -25,21 +25,21 @@ import java.nio.FloatBuffer;
 import java.util.HashMap;
 
 /*
- * LAppModel は低レベルのLive2Dモデル定義クラス Live2DModelAndroid をラップし
+ * LAppModel は低レベルのLive2Dモデル定義クラス Live2DModelAndroid をラップし       * LAppModel包装了底层Live2D模型定义类Live2DModelAndroid
  * 簡便に扱うためのユーティリティクラスです。
  *
  *
  * 機能一覧
- *  アイドリングモーション
+ *  アイドリングモーション             空转运动
  *  表情
  *  音声
- *  物理演算によるアニメーション
- *  モーションが無いときに自動で目パチ
- *  パーツ切り替えによるポーズの変更
- *  当たり判定
- *  呼吸のアニメーション
- *  ドラッグによるアニメーション
- *  デバイスの傾きによるアニメーション
+ *  物理演算によるアニメーション                物理计算动画
+ *  モーションが無いときに自動で目パチ                    没有运动时自动眨眼
+ *  パーツ切り替えによるポーズの変更                  通过切换零件来改变姿势
+ *  当たり判定                   碰撞检测
+ *  呼吸のアニメーション               呼吸动画
+ *  ドラッグによるアニメーション              拖动动画
+ *  デバイスの傾きによるアニメーション                    通过倾斜设备进行动画
  *
  */
 public final class LAppModel extends L2DBaseModel {
@@ -139,6 +139,7 @@ public final class LAppModel extends L2DBaseModel {
         // Sound
         String[] soundPaths = modelSetting.getSoundPaths();
         for (String path : soundPaths) {
+            ///这个需要处理
             SoundManager.load(applicationContext, modelHomeDir + path);
         }
 
@@ -161,7 +162,7 @@ public final class LAppModel extends L2DBaseModel {
         updating = false;// 更新状態の完了
         initialized = true;// 初期化完了
     }
-
+    //预加载运动组
     public final void preloadMotionGroup(@NotNull Context applicationContext, String name) {
         int len = modelSetting.getMotionNum(name);
         for (int i = 0; i < len; i++) {
@@ -183,24 +184,24 @@ public final class LAppModel extends L2DBaseModel {
         double timeSec = timeMSec / 1000.0;
         double t = timeSec * 2 * Math.PI;
 
-        // 待機モーション判定
+        // 待機モーション判定        待机动作判断
         if (mainMotionManager.isFinished()) {
             // モーションの再生がない場合、待機モーションの中からランダムで再生する
             startRandomMotion(applicationContext, LAppDefine.MOTION_GROUP_IDLE, LAppDefine.PRIORITY_IDLE);
         }
-        live2DModel.loadParam(); // 前回セーブされた状態をロード
-        boolean update = mainMotionManager.updateParam(live2DModel); // モーションを更新
+        live2DModel.loadParam(); // 前回セーブされた状態をロード         加载先前保存的状态
+        boolean update = mainMotionManager.updateParam(live2DModel); // モーションを更新       更新动作
         if (!update) {
-            // メインモーションの更新がないとき
-            eyeBlink.updateParam(live2DModel); // 目パチ
+            // メインモーションの更新がないとき     没有主要动作更新时
+            eyeBlink.updateParam(live2DModel); // 目パチ 眨眼
         }
         live2DModel.saveParam();// 状態を保存
 
         if (expressionManager != null)
             expressionManager.updateParam(live2DModel); // 表情でパラメータ更新（相対変化）
 
-        // ドラッグによる変化
-        // ドラッグによる顔の向きの調整
+        // ドラッグによる変化 因拖曳而改变
+        // ドラッグによる顔の向きの調整 通过拖动来调整脸部方向
         live2DModel.addToParamFloat(L2DStandardID.PARAM_ANGLE_X, dragX * 30, 1); // -30から30の値を加える
         live2DModel.addToParamFloat(L2DStandardID.PARAM_ANGLE_Y, dragY * 30, 1);
         live2DModel.addToParamFloat(L2DStandardID.PARAM_ANGLE_Z, (dragX * dragY) * -30, 1);
@@ -225,7 +226,7 @@ public final class LAppModel extends L2DBaseModel {
         if (physics != null)
             physics.updateParam(live2DModel); // 物理演算でパラメータ更新
 
-        // リップシンクの設定
+        // リップシンクの設定  嘴唇同步设置
         if (lipSync) {
             live2DModel.setParamFloat(L2DStandardID.PARAM_MOUTH_OPEN_Y, lipSyncValue, 0.8f);
         }
@@ -302,15 +303,16 @@ public final class LAppModel extends L2DBaseModel {
     }
 
     /*
-     * モーションの開始。
-     * 再生できる状態かチェックして、できなければ何もしない。
-     * 再生出来る場合は自動でファイルを読み込んで再生。
-     * 音声付きならそれも再生。
-     * フェードイン、フェードアウトの情報があればここで設定。なければ初期値。
+     * モーションの開始。运动开始。
+     * 再生できる状態かチェックして、できなければ何もしない。检查它是否可以播放，否则，什么也不做。
+     * 再生出来る場合は自動でファイルを読み込んで再生。如果可以播放，将自动读取并播放文件。
+     * 音声付きならそれも再生。 播放音频
+     * フェードイン、フェードアウトの情報があればここで設定。なければ初期値。如果您具有淡入和淡出信息，请在此处进行设置。如果不是，则为初始值。
      */
     private void startMotion(@NotNull Context applicationContext, String name, int no, int priority) {
+        ///根据参数获取动作名称
         String motionName = modelSetting.getMotionFile(name, no);
-
+        //为空，
         if (motionName == null || motionName.equals("")) {
             if (LAppDefine.DEBUG_LOG)
                 Log.d(TAG, "Failed to motion.");
@@ -319,11 +321,11 @@ public final class LAppModel extends L2DBaseModel {
 
         AMotion motion;
 
-        // 新しいモーションのpriorityと、再生中のモーション、予約済みモーションのpriorityと比較して
-        // 予約可能であれば（優先度が高ければ）再生を予約します。
+        // 新しいモーションのpriorityと、再生中のモーション、予約済みモーションのpriorityと比較して    将新动作的优先级与正在播放的动作的优先级和保留的动作进行比较
+        // 予約可能であれば（優先度が高ければ）再生を予約します。           如果可以预约（优先级更高），请预约播放。
         //
-        // 予約した新モーションは、このフレームで即時再生されるか、もしくは音声のロード等が必要な場合は
-        // 以降のフレームで再生開始されます。
+        // 予約した新モーションは、このフレームで即時再生されるか、もしくは音声のロード等が必要な場合は  保留的新动作将立即在此帧中播放，或者如果您需要加载音频等。
+        // 以降のフレームで再生開始されます。                  播放将从随后的帧开始
         if (priority == LAppDefine.PRIORITY_FORCE) {
             mainMotionManager.setReservePriority(priority);
         } else if (!mainMotionManager.reserveMotion(priority)) {
@@ -333,6 +335,7 @@ public final class LAppModel extends L2DBaseModel {
         }
 
         String motionPath = modelHomeDir + motionName;
+        ///动作载入
         motion = loadMotion(applicationContext, null, motionPath);
 
         if (motion == null) {
@@ -341,17 +344,17 @@ public final class LAppModel extends L2DBaseModel {
             return;
         }
 
-        // フェードイン、フェードアウトの設定
+        // フェードイン、フェードアウトの設定  淡入和淡出设置
         motion.setFadeIn(modelSetting.getMotionFadeIn(name, no));
         motion.setFadeOut(modelSetting.getMotionFadeOut(name, no));
 
         if (LAppDefine.DEBUG_LOG)
             Log.d(TAG, "Start motion: " + motionName);
 
-        // 音声が無いモーションは即時再生を開始します。
+        // 音声が無いモーションは即時再生を開始します。没有声音的动作将立即开始播放。
         if (modelSetting.getMotionSound(name, no) == null) {
             mainMotionManager.startMotionPrio(motion, priority);
-        } else { // 音声があるモーションは音声のロードを待って次のフレーム以降に再生を開始します。
+        } else { // 音声があるモーションは音声のロードを待って次のフレーム以降に再生を開始します。带有音频的运动会等待音频加载并在下一帧之后开始播放。
             String soundName = modelSetting.getMotionSound(name, no);
             String soundPath = modelHomeDir + soundName;
 
@@ -364,7 +367,7 @@ public final class LAppModel extends L2DBaseModel {
     }
 
     /*
-     * 表情を設定する
+     * 表情を設定する      //表情设置
      * @param motion
      */
     public final void setExpression(String name) {
@@ -375,9 +378,19 @@ public final class LAppModel extends L2DBaseModel {
         AMotion motion = expressions.get(name);
         expressionManager.startMotion(motion, false);
     }
-
     /*
-     * 表情をランダムに切り替える
+     * 左眼打开
+     */
+    public final void openLeftEye() {
+
+    }
+    /*
+     * 右眼打开
+     */
+    public final void openRightEye() {
+    }
+    /*
+     * 表情をランダムに切り替える      随机表情
      */
     public final void setRandomExpression() {
         int no = (int) (Math.random() * expressions.size());
@@ -386,7 +399,7 @@ public final class LAppModel extends L2DBaseModel {
     }
 
     public final void draw(GL10 gl) {
-        ((Live2DModelAndroid) live2DModel).setGL(gl); // OpenGLのコンテキストをLive2Dモデルに設定
+        ((Live2DModelAndroid) live2DModel).setGL(gl); // OpenGLのコンテキストをLive2Dモデルに設定  将Open GL上下文设置为Live 2D模型
 
         alpha += accAlpha;
 

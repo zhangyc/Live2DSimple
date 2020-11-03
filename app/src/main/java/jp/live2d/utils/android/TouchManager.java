@@ -27,6 +27,7 @@ public final class TouchManager {
 
 	/*
 	 * タッチ開始時イベント。
+	 * 手势开始
 	 * @param x1
 	 * @param y1
 	 * @param x2
@@ -163,6 +164,7 @@ public final class TouchManager {
 	 * @param p2x
 	 * @param p2y
 	 * @return
+	 * 返回一个平方根
 	 */
 	private float distance(float x1, float y1, float x2, float y2) {
 		return (float) Math.sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2));

@@ -81,7 +81,7 @@ public final class LAppRenderer implements GLSurfaceView.Renderer {
         delegate.update(gl);
 
         // OpenGL 設定
-        // 画面への変換行列を適用
+        // 画面への変換行列を適用   将转换矩阵应用于屏幕
         gl.glMatrixMode(GL10.GL_MODELVIEW);
         gl.glLoadIdentity();
 
@@ -118,11 +118,12 @@ public final class LAppRenderer implements GLSurfaceView.Renderer {
                 }
                 gl.glPopMatrix();
             }
-            // キャラの描画
+            // キャラの描画 人物画
             for (int i = 0; i < delegate.getModelNum(); i++) {
                 LAppModel model = delegate.getModel(i);
                 if (Objects.requireNonNull(model).isInitialized() && !Objects.requireNonNull(model).isUpdating()) {
                     model.update(delegate.getApplicationContext());
+                    //模型绘制
                     model.draw(gl);
                 }
             }

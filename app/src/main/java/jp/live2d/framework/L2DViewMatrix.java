@@ -8,6 +8,7 @@ package jp.live2d.framework;
 
 /*
  * 画面の操作による行列を扱う。
+ * 通过操作屏幕来处理矩阵。
  *
  */
 public final class L2DViewMatrix extends L2DMatrix44 {
