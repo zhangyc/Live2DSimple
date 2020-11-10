@@ -1,7 +1,6 @@
-package com.live2d.live2dsimple.facedetector.view;
+package com.live2d.live2dsimple.view;
 
 import android.app.Activity;
-import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.Log;
 
@@ -20,7 +19,7 @@ import jp.live2d.framework.L2DEyeBlink;
 import jp.live2d.framework.L2DStandardID;
 
 class Live2dRenderer implements GLSurfaceView.Renderer {
-    private Context mActivity;
+    private Activity mActivity;
 
     private Live2DModelAndroid live2DModel;
     private L2DEyeBlink mEyeBlink;
@@ -31,8 +30,8 @@ class Live2dRenderer implements GLSurfaceView.Renderer {
 
     private float wRatio, hRatio;
 
-    public void setUpModel(Context activity, String MODEL_PATH, String[] TEXTURE_PATHS,
-                           float wRatio, float hRatio, FaceDetectorProcessor faceDetectorProcessor) {
+    public void setUpModel(Activity activity, String MODEL_PATH, String[] TEXTURE_PATHS,
+                           float wRatio, float hRatio,FaceDetectorProcessor faceDetectorProcessor) {
         this.mActivity = activity;
         this.MODEL_PATH = MODEL_PATH;
         this.TEXTURE_PATHS = TEXTURE_PATHS;
@@ -40,15 +39,6 @@ class Live2dRenderer implements GLSurfaceView.Renderer {
         this.hRatio = hRatio;
         this.mEyeBlink = new L2DEyeBlink();
         this.faceDetectorProcessor=faceDetectorProcessor;
-    }
-    public void setUpModel2(Context activity, String MODEL_PATH, String[] TEXTURE_PATHS,
-                           float wRatio, float hRatio) {
-        this.mActivity = activity;
-        this.MODEL_PATH = MODEL_PATH;
-        this.TEXTURE_PATHS = TEXTURE_PATHS;
-        this.wRatio = wRatio;
-        this.hRatio = hRatio;
-        this.mEyeBlink = new L2DEyeBlink();
     }
 
     private void loadLive2dModel(GL10 gl, String modelPath, String[] texturePath) {

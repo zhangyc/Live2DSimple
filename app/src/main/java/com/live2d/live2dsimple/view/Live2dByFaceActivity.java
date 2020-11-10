@@ -1,4 +1,4 @@
-package com.live2d.live2dsimple.facedetector.view;
+package com.live2d.live2dsimple.view;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
@@ -52,14 +51,14 @@ public class Live2dByFaceActivity extends AppCompatActivity implements CompoundB
         mGLSurfaceView = new Live2dGLSurfaceView(Live2dByFaceActivity.this);
         container.addView(mGLSurfaceView);
         initCameraView();
+
     }
     private void initCameraView() {
-        ///预览
+
         preview = findViewById(R.id.preview_view);
         if (preview == null) {
             Log.d(TAG, "Preview is null");
         }
-        //识别数值
         graphicOverlay = findViewById(R.id.graphic_overlay);
         if (graphicOverlay == null) {
             Log.d(TAG, "graphicOverlay is null");
@@ -142,7 +141,6 @@ public class Live2dByFaceActivity extends AppCompatActivity implements CompoundB
     private void createCameraSource(String model) {
         // If there's no existing cameraSource, create one.
         if (cameraSource == null) {
-            //相机源
             cameraSource = new CameraSource(this, graphicOverlay);
         }
 
@@ -152,10 +150,11 @@ public class Live2dByFaceActivity extends AppCompatActivity implements CompoundB
                     Log.i(TAG, "Using Face Detector Processor");
                     FaceDetectorOptions faceDetectorOptions =
                             PreferenceUtils.getFaceDetectorOptionsForLivePreview(this);
-                    _faceDetectorProcessor=new FaceDetectorProcessor(this, faceDetectorOptions);  ///识别数据处理器
+                    _faceDetectorProcessor=new FaceDetectorProcessor(this, faceDetectorOptions);
                     mGLSurfaceView.init(Live2dByFaceActivity.this, MODEL_PATH, TEXTURE_PATHS, 1, 1,_faceDetectorProcessor);
 
-                    cameraSource.setMachineLearningFrameProcessor(_faceDetectorProcessor);
+                    cameraSource.setMachineLearningFrameProcessor(
+                            _faceDetectorProcessor);
                     break;
                 default:
                     Log.e(TAG, "Unknown model: " + model);

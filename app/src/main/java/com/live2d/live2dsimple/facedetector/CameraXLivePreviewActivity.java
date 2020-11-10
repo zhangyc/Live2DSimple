@@ -57,20 +57,8 @@ import com.google.android.gms.common.annotation.KeepName;
 import com.google.mlkit.common.MlKitException;
 import com.google.mlkit.common.model.LocalModel;
 import com.google.mlkit.vision.face.FaceDetectorOptions;
-import com.google.mlkit.vision.label.automl.AutoMLImageLabelerLocalModel;
-import com.google.mlkit.vision.label.automl.AutoMLImageLabelerOptions;
-import com.google.mlkit.vision.label.custom.CustomImageLabelerOptions;
-import com.google.mlkit.vision.label.defaults.ImageLabelerOptions;
-import com.google.mlkit.vision.objects.custom.CustomObjectDetectorOptions;
-import com.google.mlkit.vision.objects.defaults.ObjectDetectorOptions;
-import com.google.mlkit.vision.pose.PoseDetectorOptionsBase;
 import com.live2d.live2dsimple.R;
-import com.live2d.live2dsimple.barcodescanner.BarcodeScannerProcessor;
 import com.live2d.live2dsimple.facedetector.facedetector.FaceDetectorProcessor;
-import com.live2d.live2dsimple.labeldetector.LabelDetectorProcessor;
-import com.live2d.live2dsimple.objectdetector.ObjectDetectorProcessor;
-import com.live2d.live2dsimple.posedetector.PoseDetectorProcessor;
-import com.live2d.live2dsimple.textdetector.TextRecognitionProcessor;
 import com.live2d.live2dsimple.utils.CameraXViewModel;
 import com.live2d.live2dsimple.utils.GraphicOverlay;
 import com.live2d.live2dsimple.utils.VisionImageProcessor;
@@ -330,69 +318,11 @@ public final class CameraXLivePreviewActivity extends AppCompatActivity
 
     try {
       switch (selectedModel) {
-        case OBJECT_DETECTION:
-          Log.i(TAG, "Using Object Detector Processor");
-          ObjectDetectorOptions objectDetectorOptions =
-              PreferenceUtils.getObjectDetectorOptionsForLivePreview(this);
-          imageProcessor = new ObjectDetectorProcessor(this, objectDetectorOptions);
-          break;
-        case OBJECT_DETECTION_CUSTOM:
-          Log.i(TAG, "Using Custom Object Detector (Bird) Processor");
-          LocalModel localModel =
-              new LocalModel.Builder()
-                  .setAssetFilePath("custom_models/bird_classifier.tflite")
-                  .build();
-          CustomObjectDetectorOptions customObjectDetectorOptions =
-              PreferenceUtils.getCustomObjectDetectorOptionsForLivePreview(this, localModel);
-          imageProcessor = new ObjectDetectorProcessor(this, customObjectDetectorOptions);
-          break;
-        case TEXT_RECOGNITION:
-          Log.i(TAG, "Using on-device Text recognition Processor");
-          imageProcessor = new TextRecognitionProcessor(this);
-          break;
         case FACE_DETECTION:
           Log.i(TAG, "Using Face Detector Processor");
           FaceDetectorOptions faceDetectorOptions =
               PreferenceUtils.getFaceDetectorOptionsForLivePreview(this);
           imageProcessor = new FaceDetectorProcessor(this, faceDetectorOptions,null);
-          break;
-        case BARCODE_SCANNING:
-          Log.i(TAG, "Using Barcode Detector Processor");
-          imageProcessor = new BarcodeScannerProcessor(this);
-          break;
-        case IMAGE_LABELING:
-          Log.i(TAG, "Using Image Label Detector Processor");
-          imageProcessor = new LabelDetectorProcessor(this, ImageLabelerOptions.DEFAULT_OPTIONS);
-          break;
-        case IMAGE_LABELING_CUSTOM:
-          Log.i(TAG, "Using Custom Image Label (Bird) Detector Processor");
-          LocalModel localClassifier =
-              new LocalModel.Builder()
-                  .setAssetFilePath("custom_models/bird_classifier.tflite")
-                  .build();
-          CustomImageLabelerOptions customImageLabelerOptions =
-              new CustomImageLabelerOptions.Builder(localClassifier).build();
-          imageProcessor = new LabelDetectorProcessor(this, customImageLabelerOptions);
-          break;
-        case AUTOML_LABELING:
-          Log.i(TAG, "Using AutoML Image Label Detector Processor");
-          AutoMLImageLabelerLocalModel autoMLLocalModel =
-              new AutoMLImageLabelerLocalModel.Builder()
-                  .setAssetFilePath("automl/manifest.json")
-                  .build();
-          AutoMLImageLabelerOptions autoMLOptions =
-              new AutoMLImageLabelerOptions.Builder(autoMLLocalModel)
-                  .setConfidenceThreshold(0)
-                  .build();
-          imageProcessor = new LabelDetectorProcessor(this, autoMLOptions);
-          break;
-        case POSE_DETECTION:
-          PoseDetectorOptionsBase poseDetectorOptions =
-              PreferenceUtils.getPoseDetectorOptionsForLivePreview(this);
-          boolean shouldShowInFrameLikelihood =
-              PreferenceUtils.shouldShowPoseDetectionInFrameLikelihoodLivePreview(this);
-          imageProcessor =
-              new PoseDetectorProcessor(this, poseDetectorOptions, shouldShowInFrameLikelihood);
           break;
         default:
           throw new IllegalStateException("Invalid model name");

@@ -1,4 +1,4 @@
-package com.live2d.live2dsimple.facedetector.view;
+package com.live2d.live2dsimple.view;
 
 import android.app.Activity;
 import android.content.Context;
@@ -26,7 +26,7 @@ public class Live2dGLSurfaceView extends GLSurfaceView {
         this.mContext = context;
     }
 
-    public void init(Context activity, String MODEL_PATH, String[] TEXTURE_PATHS,
+    public void init(Activity activity, String MODEL_PATH, String[] TEXTURE_PATHS,
                      float wRatio, float hRatio, FaceDetectorProcessor faceDetectorProcessor) {
 //        final String MODEL_PATH = "live2d/haru/haru.moc";
 //        final String[] TEXTURE_PATHS = {
@@ -37,19 +37,6 @@ public class Live2dGLSurfaceView extends GLSurfaceView {
 
         this.mLive2dRenderer = new Live2dRenderer();
         this.mLive2dRenderer.setUpModel(activity, MODEL_PATH, TEXTURE_PATHS, wRatio, hRatio,faceDetectorProcessor);
-        this.setRenderer(this.mLive2dRenderer);
-    }
-    public void init2(Context activity, String MODEL_PATH, String[] TEXTURE_PATHS,
-                     float wRatio, float hRatio) {
-//        final String MODEL_PATH = "live2d/haru/haru.moc";
-//        final String[] TEXTURE_PATHS = {
-//                "live2d/haru/haru.1024/texture_00.png",
-//                "live2d/haru/haru.1024/texture_01.png",
-//                "live2d/haru/haru.1024/texture_02.png"
-//        };
-
-        this.mLive2dRenderer = new Live2dRenderer();
-        this.mLive2dRenderer.setUpModel2(activity, MODEL_PATH, TEXTURE_PATHS, wRatio, hRatio);
         this.setRenderer(this.mLive2dRenderer);
     }
 }

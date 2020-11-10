@@ -23,6 +23,7 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.Task;
+import com.google.mlkit.common.MlKitException;
 import com.google.mlkit.vision.common.InputImage;
 
 import com.google.mlkit.vision.face.Face;
@@ -34,8 +35,10 @@ import com.google.mlkit.vision.face.FaceLandmark;
 import com.live2d.live2dsimple.LAppDefine;
 import com.live2d.live2dsimple.LAppLive2DManager;
 import com.live2d.live2dsimple.facedetector.VisionProcessorBase;
+import com.live2d.live2dsimple.utils.FrameMetadata;
 import com.live2d.live2dsimple.utils.GraphicOverlay;
 
+import java.nio.ByteBuffer;
 import java.util.List;
 import java.util.Locale;
 import java.util.Random;
@@ -75,6 +78,9 @@ public class FaceDetectorProcessor extends VisionProcessorBase<List<Face>> {
     detector = FaceDetection.getClient(options);
     this.context=context;
   }
+
+
+
   @Override
   public void stop() {
     super.stop();
@@ -104,40 +110,6 @@ public class FaceDetectorProcessor extends VisionProcessorBase<List<Face>> {
       //updateLive2dView(face);
     }
   }
-  Random random=new Random();
-  private void updateLive2dView(Face face) {
-    ///通过单例模式来操作动作
-    if (face==null){
-      return;
-    }
-    L2DTargetPoint.getInstance().set(face.getHeadEulerAngleY()/40f,face.getHeadEulerAngleZ()/40f);
-    FaceContour  upperLipBottom= face.getContour(FaceContour.UPPER_LIP_BOTTOM);
-    FaceContour  lowerLipTop=  face.getContour(FaceContour.LOWER_LIP_TOP);
-    FaceContour leftEye=face.getContour(FaceContour.LEFT_EYE);
-    FaceContour rightEye=face.getContour(FaceContour.RIGHT_EYE);
-
-    if (upperLipBottom!=null&&lowerLipTop!=null){
-      float y1=lowerLipTop.getPoints().get(7).y;
-      float y2=upperLipBottom.getPoints().get(7).y;
-      float mouthHeight=(y1-y2)/10f;
-
-      //live2DMgr.getModel(0).getLive2DModel().addToParamFloat(L2DStandardID.PARAM_MOUTH_FORM, mouthHeight, 0.75f);
-
-//      live2DMgr.getModel(0).getLive2DModel().addToParamFloat(L2DStandardID.PARAM_MOUTH_OPEN_Y, mouthHeight, 0.75f);
-      //live2DMgr.getModel(0).setRandomExpression();
-      //live2DMgr.getModel(0).startRandomMotion(context, LAppDefine.MOTION_GROUP_TAP_BODY, LAppDefine.PRIORITY_NORMAL);
-      live2DMgr.getModel(0).getLive2DModel().setParamFloat(L2DStandardID.PARAM_MOUTH_OPEN_Y,0.5f);
-
-    }
-    if (face.getLeftEyeOpenProbability()>0.95){
-      live2DMgr.getModel(0).getLive2DModel().setParamFloat(L2DStandardID.PARAM_EYE_L_SMILE,0.75f);
-    }
-    if (face.getRightEyeOpenProbability()>0.95){
-      live2DMgr.getModel(0).getLive2DModel().setParamFloat(L2DStandardID.PARAM_EYE_R_SMILE,0.75f);
-    }
-
-  }
-
   private static void logExtrasForTesting(Face face) {
     if (face != null) {
       Log.v(MANUAL_TESTING_LOG, "face bounding box: " + face.getBoundingBox().flattenToString());

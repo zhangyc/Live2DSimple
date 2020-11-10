@@ -20,22 +20,8 @@ import android.widget.ToggleButton;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
-import com.google.mlkit.common.model.LocalModel;
-import com.google.mlkit.vision.face.Face;
 import com.google.mlkit.vision.face.FaceDetectorOptions;
-import com.google.mlkit.vision.label.automl.AutoMLImageLabelerLocalModel;
-import com.google.mlkit.vision.label.automl.AutoMLImageLabelerOptions;
-import com.google.mlkit.vision.label.custom.CustomImageLabelerOptions;
-import com.google.mlkit.vision.label.defaults.ImageLabelerOptions;
-import com.google.mlkit.vision.objects.custom.CustomObjectDetectorOptions;
-import com.google.mlkit.vision.objects.defaults.ObjectDetectorOptions;
-import com.google.mlkit.vision.pose.PoseDetectorOptionsBase;
-import com.live2d.live2dsimple.barcodescanner.BarcodeScannerProcessor;
 import com.live2d.live2dsimple.facedetector.facedetector.FaceDetectorProcessor;
-import com.live2d.live2dsimple.labeldetector.LabelDetectorProcessor;
-import com.live2d.live2dsimple.objectdetector.ObjectDetectorProcessor;
-import com.live2d.live2dsimple.posedetector.PoseDetectorProcessor;
-import com.live2d.live2dsimple.textdetector.TextRecognitionProcessor;
 import com.live2d.live2dsimple.utils.CameraSource;
 import com.live2d.live2dsimple.utils.CameraSourcePreview;
 import com.live2d.live2dsimple.utils.GraphicOverlay;
@@ -44,11 +30,6 @@ import com.live2d.live2dsimple.utils.preference.PreferenceUtils;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
-import java.util.Set;
-
-import jp.live2d.framework.L2DStandardID;
-import jp.live2d.framework.L2DTargetPoint;
 import jp.live2d.utils.android.SoundManager;
 
 public final class MainActivity extends Activity implements CompoundButton.OnCheckedChangeListener {
