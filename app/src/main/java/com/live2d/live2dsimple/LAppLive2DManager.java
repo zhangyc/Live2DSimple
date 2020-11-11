@@ -37,10 +37,21 @@ import java.util.Arrays;
 public final class LAppLive2DManager {
     // ログ用タグ
     private static final String TAG = "SampleLive2DManager";
+
+    public void setModelNameList(ArrayList<LSImpleModel> modelNameList) {
+        this.modelNameList = modelNameList;
+
+    }
+
+    private  ArrayList<LSImpleModel> modelNameList;
     // アプリケーションコンテキスト
     private Context applicationContext;
     // モデル表示用View  ///模型显示
     private LAppView view;
+
+    public ArrayList<LAppModel> getModels() {
+        return models;
+    }
     // モデルデータ  ///模型数据
     private ArrayList<LAppModel> models;
     // ボタンから実行できるサンプル機能  可以通过按钮执行的示例功能
@@ -52,7 +63,9 @@ public final class LAppLive2DManager {
         Live2D.init();
         Live2DFramework.setPlatformManager(new PlatformManager());
         models = new ArrayList<>();
+        modelNameList = new ArrayList<>();
     }
+
 
     @Contract(pure = true)
     public final Context getApplicationContext() {
@@ -80,6 +93,28 @@ public final class LAppLive2DManager {
      */
     public final void update(GL10 gl) {
         view.update();
+        if (modelNameList.isEmpty()){
+            return;
+        }
+
+
+        int length=modelNameList.size();
+        int modelsLength=models.size();
+        if (modelsLength!=length){
+            releaseModel();
+            for (int i=0;i<length;i++){
+                LAppModel lAppModel=new LAppModel();
+                lAppModel.load(applicationContext,gl,modelNameList.get(i).getModelName(),modelNameList.get(i).getCenter_x(),modelNameList.get(i).getY());
+                lAppModel.feedIn();
+                models.add(lAppModel);
+            }
+        }else {
+            return;
+        }
+
+
+
+
         if (reloadFlg) {
             // モデル切り替えボタンが押された時、モデルを再読み込みする     //按下模型切换按钮时重新加载模型
             reloadFlg = false;
@@ -90,35 +125,39 @@ public final class LAppLive2DManager {
                 switch (no) {
                     case 0: // ハル
                         releaseModel();
-
                         models.add(new LAppModel());
-                        models.get(0).load(applicationContext, gl, LAppDefine.MODEL_HARU);
+                        models.get(0).load(applicationContext, gl, LAppDefine.MODEL_HARU,0.0f,0.0f);
                         models.get(0).feedIn();
                         break;
                     case 1: // しずく
                         releaseModel();
 
                         models.add(new LAppModel());
-                        models.get(0).load(applicationContext, gl, LAppDefine.MODEL_SHIZUKU);
+                        models.get(0).load(applicationContext, gl, LAppDefine.MODEL_SHIZUKU,0.0f,0.0f);
                         models.get(0).feedIn();
                         break;
                     case 2: // わんこ
                         releaseModel();
 
                         models.add(new LAppModel());
-                        models.get(0).load(applicationContext, gl, LAppDefine.MODEL_WANKO);
+                        models.get(0).load(applicationContext, gl, LAppDefine.MODEL_WANKO,0.0f,0.0f);
                         models.get(0).feedIn();
                         break;
                     case 3: // 複数モデル
                         releaseModel();
-
+                        //加载一个模型
                         models.add(new LAppModel());
-                        models.get(0).load(applicationContext, gl, LAppDefine.MODEL_HARU_A);
+                        models.get(0).load(applicationContext, gl, LAppDefine.MODEL_HARU_A,-0.5f,1.2f);
                         models.get(0).feedIn();
-
+                        //加载第二个模型
                         models.add(new LAppModel());
-                        models.get(1).load(applicationContext, gl, LAppDefine.MODEL_HARU_B);
+                        models.get(1).load(applicationContext, gl, LAppDefine.MODEL_HARU_B,0.0f,0.0f);
                         models.get(1).feedIn();
+                        //加载第三个模型
+                        models.add(new LAppModel());
+                        models.get(2).load(applicationContext, gl, LAppDefine.MODEL_WANKO,0.5f,0.5f);
+                        models.get(2).feedIn();
+
                         break;
                     default:
                         break;
@@ -208,9 +247,10 @@ public final class LAppLive2DManager {
      * モデルの切り替え
      */
     public final void changeModel() {
-        reloadFlg = true; // フラグだけ立てて次回update時に切り替え
+        reloadFlg = true; // フラグだけ立てて次回update時に切り替え仅设置标志并在下次更新时切换
         modelCount++;
     }
+
 
 
     //=========================================================

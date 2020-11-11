@@ -35,6 +35,10 @@ public class Live2dByFaceActivity extends AppCompatActivity implements CompoundB
             "live2d/haru/haru.1024/texture_01.png",
             "live2d/haru/haru.1024/texture_02.png"
     };
+    final String MODEL_PATH2 = "live2d/wanko/wanko.moc";
+    final String[] TEXTURE_PATHS2 = {
+            "live2d/wanko/wanko.1024/texture_00.png",
+    };
     private CameraSource cameraSource = null;
     private CameraSourcePreview preview;
     private GraphicOverlay graphicOverlay;
@@ -43,14 +47,19 @@ public class Live2dByFaceActivity extends AppCompatActivity implements CompoundB
     protected final double[] emotion = new double[10];
 
     private String selectedModel = FACE_DETECTION;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_live2d_by_face);
         container = (LinearLayout) findViewById(R.id.ll_face_container);
+
         mGLSurfaceView = new Live2dGLSurfaceView(Live2dByFaceActivity.this);
+        mGLSurfaceView.init(Live2dByFaceActivity.this, MODEL_PATH, TEXTURE_PATHS, 1, 1);
+
+
         container.addView(mGLSurfaceView);
-        initCameraView();
+//        initCameraView();
 
     }
     private void initCameraView() {
@@ -151,7 +160,7 @@ public class Live2dByFaceActivity extends AppCompatActivity implements CompoundB
                     FaceDetectorOptions faceDetectorOptions =
                             PreferenceUtils.getFaceDetectorOptionsForLivePreview(this);
                     _faceDetectorProcessor=new FaceDetectorProcessor(this, faceDetectorOptions);
-                    mGLSurfaceView.init(Live2dByFaceActivity.this, MODEL_PATH, TEXTURE_PATHS, 1, 1,_faceDetectorProcessor);
+                    mGLSurfaceView.init(Live2dByFaceActivity.this, MODEL_PATH, TEXTURE_PATHS, 1, 1);
 
                     cameraSource.setMachineLearningFrameProcessor(
                             _faceDetectorProcessor);

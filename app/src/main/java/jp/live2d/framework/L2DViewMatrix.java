@@ -97,7 +97,7 @@ public final class L2DViewMatrix extends L2DMatrix44 {
     }
 
     /*
-     * デバイスに対応する論理座標上の範囲の設定
+     * デバイスに対応する論理座標上の範囲の設定  在与设备相对应的逻辑坐标上设置范围
      * @param left
      * @param right
      * @param bottom
@@ -111,7 +111,7 @@ public final class L2DViewMatrix extends L2DMatrix44 {
     }
 
     /*
-     * 論理座標上の移動可能範囲の設定
+     * 論理座標上の移動可能範囲の設定   在逻辑坐标上设置可移动范围
      * @param left
      * @param right
      * @param bottom

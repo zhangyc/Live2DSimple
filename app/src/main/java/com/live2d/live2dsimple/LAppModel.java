@@ -49,10 +49,10 @@ public final class LAppModel extends L2DBaseModel {
     private FloatBuffer debugBufferVer = null;
     private FloatBuffer debugBufferColor = null;
     //  モデル関連
-    private ModelSetting modelSetting = null;    // モデルファイルやモーションの定義
+    private ModelSetting modelSetting = null;    // モデルファイルやモーションの定義模型文件和运动定义
     private String modelHomeDir;            // モデルデータのあるディレクトリ
 
-    LAppModel() {
+    public LAppModel() {
         super();
         if (LAppDefine.DEBUG_LOG) {
             debugMode = true;
@@ -69,8 +69,10 @@ public final class LAppModel extends L2DBaseModel {
      * モデルを初期化する
      * @param gl
      * @throws Exception
+     *
+     *
      */
-    public final void load(@NotNull Context applicationContext, GL10 gl, @NotNull String modelSettingPath) {
+    public final void load(@NotNull Context applicationContext, GL10 gl, @NotNull String modelSettingPath,@NotNull float center_x,@NotNull float y) {
         updating = true;
         initialized = false;
 
@@ -111,8 +113,10 @@ public final class LAppModel extends L2DBaseModel {
         loadPhysics(applicationContext, modelHomeDir + modelSetting.getPhysicsFile());
         // パーツ切り替え
         loadPose(applicationContext, modelHomeDir + modelSetting.getPoseFile());
-        // レイアウト
+        // レイアウト  布局
         HashMap<String, Float> layout = new HashMap<>();
+
+
         if (modelSetting.getLayout(layout)) {
             if (layout.get("width") != null)
                 modelMatrix.setWidth(layout.get("width"));
@@ -121,9 +125,13 @@ public final class LAppModel extends L2DBaseModel {
             if (layout.get("x") != null)
                 modelMatrix.setX(layout.get("x"));
             if (layout.get("y") != null)
-                modelMatrix.setY(layout.get("y"));
+//                modelMatrix.setY(layout.get("y"));
+                modelMatrix.setY(y);
+
             if (layout.get("center_x") != null)
-                modelMatrix.centerX(layout.get("center_x"));
+                modelMatrix.centerX(center_x);
+//            modelMatrix.centerX(layout.get("center_x"));
+
             if (layout.get("center_y") != null)
                 modelMatrix.centerY(layout.get("center_y"));
             if (layout.get("top") != null)
@@ -416,7 +424,7 @@ public final class LAppModel extends L2DBaseModel {
 
         if (alpha < 0.999) {
             // 半透明
-            // オフスクリーンにモデルを描画
+            // オフスクリーンにモデルを描画 在屏幕外绘制模型
             OffscreenImage.setOffscreen(gl);
             gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
             gl.glPushMatrix();
@@ -426,7 +434,7 @@ public final class LAppModel extends L2DBaseModel {
             }
             gl.glPopMatrix();
 
-            // 実際のウィンドウに半透明で描画
+            // 実際のウィンドウに半透明で描画  在实际窗口中半透明地绘制
             OffscreenImage.setOnscreen(gl);
             gl.glPushMatrix();
             {
@@ -444,7 +452,7 @@ public final class LAppModel extends L2DBaseModel {
             gl.glPopMatrix();
 
             if (LAppDefine.DEBUG_DRAW_HIT_AREA) {
-                // デバッグ用当たり判定の描画
+                // デバッグ用当たり判定の描画  调试命中判断图
                 drawHitArea(gl);
             }
         }
@@ -453,7 +461,7 @@ public final class LAppModel extends L2DBaseModel {
     /*
      * 当たり判定との簡易テスト。
      * 指定IDの頂点リストからそれらを含む最大の矩形を計算し、点がそこに含まれるか判定
-     *
+     *  *通过命中判断进行简单测试。 *从具有指定ID的顶点列表中计算包含它们的最大矩形，并确定这些点是否包含在其中。
      * @param id
      * @param testX
      * @param testY

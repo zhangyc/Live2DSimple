@@ -31,14 +31,14 @@ class Live2dRenderer implements GLSurfaceView.Renderer {
     private float wRatio, hRatio;
 
     public void setUpModel(Activity activity, String MODEL_PATH, String[] TEXTURE_PATHS,
-                           float wRatio, float hRatio,FaceDetectorProcessor faceDetectorProcessor) {
+                           float wRatio, float hRatio) {
         this.mActivity = activity;
         this.MODEL_PATH = MODEL_PATH;
         this.TEXTURE_PATHS = TEXTURE_PATHS;
         this.wRatio = wRatio;
         this.hRatio = hRatio;
         this.mEyeBlink = new L2DEyeBlink();
-        this.faceDetectorProcessor=faceDetectorProcessor;
+
     }
 
     private void loadLive2dModel(GL10 gl, String modelPath, String[] texturePath) {
@@ -70,49 +70,49 @@ class Live2dRenderer implements GLSurfaceView.Renderer {
         mEyeBlink.updateParam(live2DModel);
         //live2DModel.saveParam();
         ///通过activity的值来更新\
-        if (faceDetectorProcessor!=null&&faceDetectorProcessor.getFace()!=null){
-            Face face = faceDetectorProcessor.getFace();
-            if (face==null){
-                return;
-            }
-            FaceContour upperLipBottom = faceDetectorProcessor.getFace().getContour(FaceContour.UPPER_LIP_BOTTOM);
-            FaceContour lowerLipTop = faceDetectorProcessor.getFace().getContour(FaceContour.LOWER_LIP_TOP);
-            FaceContour rightEye = faceDetectorProcessor.getFace().getContour(FaceContour.RIGHT_EYE);
-            FaceContour leftEye = faceDetectorProcessor.getFace().getContour(FaceContour.LEFT_EYE);
-            if (lowerLipTop!=null&&upperLipBottom!=null){
-                float mouthHeght=lowerLipTop.getPoints().get(7).y-upperLipBottom.getPoints().get(7).y;
-                live2DModel.setParamFloat(L2DStandardID.PARAM_MOUTH_OPEN_Y, mouthHeght/10f, 0.75f);
-                live2DModel.setParamFloat(L2DStandardID.PARAM_MOUTH_FORM, mouthHeght/10f, 0.75f);
-            }
-//            if (rightEye!=null){
-//                float rightHeight=rightEye.getPoints().get(12).y-rightEye.getPoints().get(5).y;
-//                live2DModel.setParamFloat(L2DStandardID.PARAM_EYE_R_OPEN, rightHeight/20f, 0.75f);
+//        if (faceDetectorProcessor!=null&&faceDetectorProcessor.getFace()!=null){
+//            Face face = faceDetectorProcessor.getFace();
+//            if (face==null){
+//                return;
+//            }
+//            FaceContour upperLipBottom = faceDetectorProcessor.getFace().getContour(FaceContour.UPPER_LIP_BOTTOM);
+//            FaceContour lowerLipTop = faceDetectorProcessor.getFace().getContour(FaceContour.LOWER_LIP_TOP);
+//            FaceContour rightEye = faceDetectorProcessor.getFace().getContour(FaceContour.RIGHT_EYE);
+//            FaceContour leftEye = faceDetectorProcessor.getFace().getContour(FaceContour.LEFT_EYE);
+//            if (lowerLipTop!=null&&upperLipBottom!=null){
+//                float mouthHeght=lowerLipTop.getPoints().get(7).y-upperLipBottom.getPoints().get(7).y;
+//                live2DModel.setParamFloat(L2DStandardID.PARAM_MOUTH_OPEN_Y, mouthHeght/10f, 0.75f);
+//                live2DModel.setParamFloat(L2DStandardID.PARAM_MOUTH_FORM, mouthHeght/10f, 0.75f);
+//            }
+////            if (rightEye!=null){
+////                float rightHeight=rightEye.getPoints().get(12).y-rightEye.getPoints().get(5).y;
+////                live2DModel.setParamFloat(L2DStandardID.PARAM_EYE_R_OPEN, rightHeight/20f, 0.75f);
+////
+////
+////            }
+////            if (leftEye!=null){
+////                float leftHeght=leftEye.getPoints().get(12).y-leftEye.getPoints().get(5).y;
+////                live2DModel.setParamFloat(L2DStandardID.PARAM_EYE_L_OPEN, leftHeght/20f, 0.75f);
+////            }
+//            if (face.getRightEyeOpenProbability()!=null&&face.getLeftEyeOpenProbability()!=null){
+//                if (face.getRightEyeOpenProbability()>0.98f){
+//                    live2DModel.setParamFloat(L2DStandardID.PARAM_EYE_R_OPEN,1.0f, 0.75f);
+//                }else if (face.getRightEyeOpenProbability()<0.1f){
+//                    live2DModel.setParamFloat(L2DStandardID.PARAM_EYE_R_OPEN,0.0f, 0.75f);
+//                }
+//                if (face.getLeftEyeOpenProbability()>0.98f){
+//                    live2DModel.setParamFloat(L2DStandardID.PARAM_EYE_L_OPEN,1.0f, 0.75f);
+//                }else if (face.getRightEyeOpenProbability()<0.1f){
+//                    live2DModel.setParamFloat(L2DStandardID.PARAM_EYE_L_OPEN,0.0f, 0.75f);
+//                }
+//            }
+//
+//            live2DModel.setParamFloat(L2DStandardID.PARAM_ANGLE_Z, faceDetectorProcessor.getFace().getHeadEulerAngleZ(), 0.75f);
+//            live2DModel.setParamFloat(L2DStandardID.PARAM_ANGLE_X , faceDetectorProcessor.getFace().getHeadEulerAngleY(), 0.75f);
+//            live2DModel.setParamFloat(L2DStandardID.PARAM_ANGLE_Y , faceDetectorProcessor.getFace().getHeadEulerAngleX(), 0.75f);
 //
 //
-//            }
-//            if (leftEye!=null){
-//                float leftHeght=leftEye.getPoints().get(12).y-leftEye.getPoints().get(5).y;
-//                live2DModel.setParamFloat(L2DStandardID.PARAM_EYE_L_OPEN, leftHeght/20f, 0.75f);
-//            }
-            if (face.getRightEyeOpenProbability()!=null&&face.getLeftEyeOpenProbability()!=null){
-                if (face.getRightEyeOpenProbability()>0.98f){
-                    live2DModel.setParamFloat(L2DStandardID.PARAM_EYE_R_OPEN,1.0f, 0.75f);
-                }else if (face.getRightEyeOpenProbability()<0.1f){
-                    live2DModel.setParamFloat(L2DStandardID.PARAM_EYE_R_OPEN,0.0f, 0.75f);
-                }
-                if (face.getLeftEyeOpenProbability()>0.98f){
-                    live2DModel.setParamFloat(L2DStandardID.PARAM_EYE_L_OPEN,1.0f, 0.75f);
-                }else if (face.getRightEyeOpenProbability()<0.1f){
-                    live2DModel.setParamFloat(L2DStandardID.PARAM_EYE_L_OPEN,0.0f, 0.75f);
-                }
-            }
-
-            live2DModel.setParamFloat(L2DStandardID.PARAM_ANGLE_Z, faceDetectorProcessor.getFace().getHeadEulerAngleZ(), 0.75f);
-            live2DModel.setParamFloat(L2DStandardID.PARAM_ANGLE_X , faceDetectorProcessor.getFace().getHeadEulerAngleY(), 0.75f);
-            live2DModel.setParamFloat(L2DStandardID.PARAM_ANGLE_Y , faceDetectorProcessor.getFace().getHeadEulerAngleX(), 0.75f);
-
-
-        }
+//        }
 
 
 

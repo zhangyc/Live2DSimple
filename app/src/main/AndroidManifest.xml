@@ -20,7 +20,7 @@
 <!--        android:supportsRtl="true"-->
 <!--        android:theme="@style/AppTheme">-->
 <!--&lt;!&ndash;        <activity android:name=".facedetector.view.Live2dByFaceActivity"></activity>&ndash;&gt;-->
-<!--        <activity android:name=".view.Live2dByFaceActivity">-->
+<!--        <activity android:name=".MainActivity">-->
 <!--            <intent-filter>-->
 <!--                <action android:name="android.intent.action.MAIN" />-->
 

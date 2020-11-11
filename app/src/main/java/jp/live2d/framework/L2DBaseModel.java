@@ -19,7 +19,7 @@ import java.util.Map;
 public class L2DBaseModel {
     // モデル関連
     protected ALive2DModel live2DModel = null;    // Live2Dモデルクラス
-    protected L2DModelMatrix modelMatrix = null;  // Live2Dモデラー上の座標系からワールド座標系へ変換するための行列
+    protected L2DModelMatrix modelMatrix = null;  // Live2Dモデラー上の座標系からワールド座標系へ変換するための行列  用于从Live 2D Modeler上的坐标系转换为世界坐标系的矩阵
 
     // モーション・状態管理
     protected Map<String, AMotion> expressions;   // 表情モーションデータ

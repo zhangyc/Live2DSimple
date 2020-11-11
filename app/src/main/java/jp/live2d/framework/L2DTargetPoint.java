@@ -12,7 +12,7 @@ public final class L2DTargetPoint {
     // 饱汉
 // UnThreadSafe
     private static L2DTargetPoint singleton = null;
-    private L2DTargetPoint() {
+    public L2DTargetPoint() {
     }
     public static L2DTargetPoint getInstance() {
         if (singleton == null) {
