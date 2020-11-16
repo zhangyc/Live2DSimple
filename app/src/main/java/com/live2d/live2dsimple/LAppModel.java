@@ -51,6 +51,24 @@ public final class LAppModel extends L2DBaseModel {
     //  モデル関連
     private ModelSetting modelSetting = null;    // モデルファイルやモーションの定義模型文件和运动定义
     private String modelHomeDir;            // モデルデータのあるディレクトリ
+    private String userId;
+    private RealFaceBean realFaceBean;
+
+    public RealFaceBean getRealFaceBean() {
+        return realFaceBean;
+    }
+
+    public void setRealFaceBean(RealFaceBean realFaceBean) {
+        this.realFaceBean = realFaceBean;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
 
     public LAppModel() {
         super();
@@ -148,7 +166,7 @@ public final class LAppModel extends L2DBaseModel {
         String[] soundPaths = modelSetting.getSoundPaths();
         for (String path : soundPaths) {
             ///这个需要处理
-            SoundManager.load(applicationContext, modelHomeDir + path);
+            //SoundManager.load(applicationContext, modelHomeDir + path);
         }
 
         // 初期パラメータ
@@ -181,7 +199,7 @@ public final class LAppModel extends L2DBaseModel {
         }
     }
 
-    public final void update(@NotNull Context applicationContext) {
+    public final void update(@NotNull Context applicationContext,RealFaceBean faceBean) {
         if (live2DModel == null) {
             if (LAppDefine.DEBUG_LOG)
                 Log.d(TAG, "Failed to update.");
@@ -230,6 +248,29 @@ public final class LAppModel extends L2DBaseModel {
 
         // 加速度による変化
         live2DModel.addToParamFloat(L2DStandardID.PARAM_ANGLE_Z, 90 * accelerationX, 0.5f);
+
+
+
+        //实时面部追踪---下周来了继续
+        if (faceBean!=null){
+            live2DModel.setParamFloat(L2DStandardID.PARAM_ANGLE_Z, faceBean.getAngle_z(), 0.75f);
+            live2DModel.setParamFloat(L2DStandardID.PARAM_ANGLE_X , faceBean.getAngle_x(), 0.75f);
+            live2DModel.setParamFloat(L2DStandardID.PARAM_ANGLE_Y , faceBean.getAngle_y(), 0.75f);
+
+            if (faceBean.getRightEyeOpenProbability()>0.98f){
+                live2DModel.setParamFloat(L2DStandardID.PARAM_EYE_R_OPEN,1.0f, 0.75f);
+            }else if (faceBean.getRightEyeOpenProbability()<0.1f){
+                live2DModel.setParamFloat(L2DStandardID.PARAM_EYE_R_OPEN,0.0f, 0.75f);
+            }
+            if (faceBean.getLeftEyeOpenProbability()>0.98f){
+                live2DModel.setParamFloat(L2DStandardID.PARAM_EYE_L_OPEN,1.0f, 0.75f);
+            }else if (faceBean.getRightEyeOpenProbability()<0.1f){
+                live2DModel.setParamFloat(L2DStandardID.PARAM_EYE_L_OPEN,0.0f, 0.75f);
+            }
+            live2DModel.setParamFloat(L2DStandardID.PARAM_MOUTH_OPEN_Y, faceBean.getMouthHeight(), 0.75f);
+            live2DModel.setParamFloat(L2DStandardID.PARAM_MOUTH_FORM, faceBean.getMouthHeight(), 0.75f);
+        }
+
 
         if (physics != null)
             physics.updateParam(live2DModel); // 物理演算でパラメータ更新

@@ -30,6 +30,7 @@ public final class LAppRenderer implements GLSurfaceView.Renderer {
     private float accelerationX = 0;
     private float accelerationY = 0;
 
+
     LAppRenderer(LAppLive2DManager live2DMgr) {
         this.delegate = live2DMgr;
     }
@@ -121,8 +122,10 @@ public final class LAppRenderer implements GLSurfaceView.Renderer {
             // キャラの描画 人物画
             for (int i = 0; i < delegate.getModelNum(); i++) {
                 LAppModel model = delegate.getModel(i);
+
+
                 if (Objects.requireNonNull(model).isInitialized() && !Objects.requireNonNull(model).isUpdating()) {
-                    model.update(delegate.getApplicationContext());
+                    model.update(delegate.getApplicationContext(),model.getRealFaceBean());
                     //模型绘制
                     model.draw(gl);
                 }
@@ -140,9 +143,9 @@ public final class LAppRenderer implements GLSurfaceView.Renderer {
      * 背景の設定
      * @param context
      */
-    private void setupBackground(@NotNull Context context, GL10 gl) {
+    public void setupBackground(@NotNull Context context, GL10 gl) {
         try {
-            InputStream in = FileManager.open(context, LAppDefine.BACK_IMAGE_NAME);
+            InputStream in = FileManager.openRes(context,LAppDefine.BACK_IMAGE_NAME);
             bg = new SimpleImage(gl, in);
             // 描画範囲。画面の最大表示範囲に合わせる
             bg.setDrawRect(

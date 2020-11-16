@@ -4,6 +4,8 @@ public class LSImpleModel {
     private String modelName;
     private float center_x;
     private float y;
+    private String userId;
+    private RealFaceBean faceBean;
 
     public String getModelName() {
         return modelName;
@@ -27,5 +29,21 @@ public class LSImpleModel {
 
     public void setY(float y) {
         this.y = y;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
+    public RealFaceBean getFaceBean() {
+        return faceBean;
+    }
+
+    public void setFaceBean(RealFaceBean faceBean) {
+        this.faceBean = faceBean;
     }
 }

@@ -26,6 +26,9 @@ public final class FileManager {
         return applicationContext.getAssets().open(path);
     }
 
+    private static InputStream openFile(String path) throws IOException {
+        return new FileInputStream(path);
+    }
     public static boolean isCacheExists(Context applicationContext, String path) {
         File file = new File(applicationContext.getCacheDir(), path);
         return file.exists();
@@ -51,7 +54,12 @@ public final class FileManager {
     }
 
     public static InputStream open(Context applicationContext, String path) throws IOException {
+        return openFile(path);
+        //return openResource(applicationContext, path);
+    }
+    public static InputStream openRes(Context applicationContext, String path) throws IOException {
         return openResource(applicationContext, path);
+        //return openResource(applicationContext, path);
     }
 
     public static AssetFileDescriptor openFd(Context applicationContext, String path) throws IOException {

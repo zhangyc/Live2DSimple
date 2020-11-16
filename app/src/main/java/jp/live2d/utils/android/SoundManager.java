@@ -12,7 +12,11 @@ import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.SoundPool;
 
+import java.io.File;
+import java.io.FileDescriptor;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,7 +37,13 @@ public final class SoundManager {
 
         try {
             AssetFileDescriptor assetFileDescriptorArticle = applicationContext.getAssets().openFd(path);
-            int soundID = soundPool.load(assetFileDescriptorArticle, 1);
+            FileInputStream inputStream =(FileInputStream)FileManager.open(applicationContext,path);
+
+
+            FileDescriptor fileDescriptor = inputStream.getFD();
+
+            int soundID = soundPool.load(fileDescriptor, 0,0,1);
+//            int soundID = soundPool.load(assetFileDescriptorArticle, 1);
             soundList.put(path, soundID);
         } catch (IOException e) {
             // TODO 自動生成された catch ブロック

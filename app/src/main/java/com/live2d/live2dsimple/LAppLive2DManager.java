@@ -8,16 +8,27 @@ package com.live2d.live2dsimple;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Build;
 import android.util.Log;
+
+import androidx.annotation.RequiresApi;
+
+import com.google.android.gms.common.util.Predicate;
+
 import jp.live2d.Live2D;
 import jp.live2d.framework.L2DViewMatrix;
 import jp.live2d.framework.Live2DFramework;
+
+import org.apache.commons.beanutils.BeanPropertyValueEqualsPredicate;
+import org.apache.commons.collections.CollectionUtils;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 
 import javax.microedition.khronos.opengles.GL10;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /*
  *  LAppLive2DManagerは、Live2D関連の司令塔としてモデル、ビュー、イベント等を管理するクラス（のサンプル実装）になります。
@@ -41,6 +52,20 @@ public final class LAppLive2DManager {
     public void setModelNameList(ArrayList<LSImpleModel> modelNameList) {
         this.modelNameList = modelNameList;
 
+    }
+    public void addLSimpleModel(LSImpleModel lsImpleModel) {
+        this.modelNameList.add(lsImpleModel);
+
+    }
+    private String bgImgPath;
+
+
+    public String getBgImgPath() {
+        return bgImgPath;
+    }
+
+    public void setBgImgPath(String bgImgPath) {
+        this.bgImgPath = bgImgPath;
     }
 
     private  ArrayList<LSImpleModel> modelNameList;
@@ -104,8 +129,10 @@ public final class LAppLive2DManager {
             releaseModel();
             for (int i=0;i<length;i++){
                 LAppModel lAppModel=new LAppModel();
+                lAppModel.setUserId(modelNameList.get(i).getUserId());
                 lAppModel.load(applicationContext,gl,modelNameList.get(i).getModelName(),modelNameList.get(i).getCenter_x(),modelNameList.get(i).getY());
                 lAppModel.feedIn();
+                lAppModel.setRealFaceBean(modelNameList.get(i).getFaceBean());
                 models.add(lAppModel);
             }
         }else {
@@ -180,6 +207,24 @@ public final class LAppLive2DManager {
         if (no >= models.size())
             return null;
         return models.get(no);
+    }
+
+    /**
+     * 根据userid获取Model,
+     * @param userId
+     * @return
+     */
+    public final LAppModel getModelByUserId(String userId){
+
+        if (!models.isEmpty()){
+            int length=models.size();
+            for (int i=0;i<length;i++){
+                if (userId.equals(models.get(i).getUserId())){
+                    return models.get(i);
+                }
+            }
+        }
+        return null;
     }
 
     public final int getModelNum() {
