@@ -18,6 +18,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Objects;
 
 /*
@@ -41,7 +42,7 @@ public final class LAppRenderer implements GLSurfaceView.Renderer {
     @Override
     public final void onSurfaceCreated(GL10 context, EGLConfig arg1) {
         // 背景の作成
-        setupBackground(delegate.getApplicationContext(), context);
+        setupBackground(delegate.getApplicationContext(),delegate.getModels(), context);
     }
 
     /*
@@ -112,7 +113,7 @@ public final class LAppRenderer implements GLSurfaceView.Renderer {
             if (bg != null) {
                 gl.glPushMatrix();
                 {
-                    float SCALE_X = 0.25f; // デバイスの回転による揺れ幅
+                    float SCALE_X = 0.25f; // デバイスの回転による揺れ幅  设备旋转引起的摆动宽度
                     float SCALE_Y = 0.1f;
                     gl.glTranslatef(-SCALE_X * accelerationX, SCALE_Y * accelerationY, 0); // 揺れ
                     bg.draw(gl);
@@ -125,6 +126,9 @@ public final class LAppRenderer implements GLSurfaceView.Renderer {
 
 
                 if (Objects.requireNonNull(model).isInitialized() && !Objects.requireNonNull(model).isUpdating()) {
+                    float l2dHeight=model.getLive2DModel().getCanvasHeight();
+                    float ledWidth=model.getLive2DModel().getCanvasWidth();
+
                     model.update(delegate.getApplicationContext(),model.getRealFaceBean());
                     //模型绘制
                     model.draw(gl);
@@ -143,19 +147,22 @@ public final class LAppRenderer implements GLSurfaceView.Renderer {
      * 背景の設定
      * @param context
      */
-    public void setupBackground(@NotNull Context context, GL10 gl) {
-        try {
-            InputStream in = FileManager.openRes(context,LAppDefine.BACK_IMAGE_NAME);
-            bg = new SimpleImage(gl, in);
-            // 描画範囲。画面の最大表示範囲に合わせる
-            bg.setDrawRect(
-                    LAppDefine.VIEW_LOGICAL_MAX_LEFT,
-                    LAppDefine.VIEW_LOGICAL_MAX_RIGHT,
-                    LAppDefine.VIEW_LOGICAL_MAX_BOTTOM,
-                    LAppDefine.VIEW_LOGICAL_MAX_TOP);
+    public void setupBackground(@NotNull Context context, ArrayList<LAppModel> models, GL10 gl) {
 
-            // 画像を使用する範囲(uv)
-            bg.setUVRect(0.0f, 1.0f, 0.0f, 1.0f);
+        try {
+            for (LAppModel lAppModel: models) {
+                InputStream in = FileManager.openRes(context,LAppDefine.BACK_IMAGE_NAME);
+                bg = new SimpleImage(gl, in);
+                // 描画範囲。画面の最大表示範囲に合わせる/绘图范围。适应屏幕的最大显示范围
+                bg.setDrawRect(
+                        LAppDefine.VIEW_LOGICAL_MAX_LEFT,
+                        LAppDefine.VIEW_LOGICAL_MAX_RIGHT,
+                        LAppDefine.VIEW_LOGICAL_MAX_BOTTOM,
+                        LAppDefine.VIEW_LOGICAL_MAX_TOP);
+
+                // 画像を使用する範囲(uv)
+                bg.setUVRect(0.0f, lAppModel.getLive2DModel().getCanvasWidth(), 0.0f, lAppModel.getLive2DModel().getCanvasHeight());
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }

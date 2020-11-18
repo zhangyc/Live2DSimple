@@ -219,12 +219,7 @@ public final class MainActivity extends Activity implements CompoundButton.OnChe
         ImageButton iBtn = findViewById(R.id.imageButton1);
         ClickListener listener = new ClickListener();
         iBtn.setOnClickListener(listener);
-        findViewById(R.id.live2dView).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-              ///lAppView.getDragMgr().set(0.5f,0.5f);
-            }
-        });
+
     }
     private TextToSpeech tts;
 

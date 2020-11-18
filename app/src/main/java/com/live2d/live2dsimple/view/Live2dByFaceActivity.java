@@ -52,14 +52,14 @@ public class Live2dByFaceActivity extends AppCompatActivity implements CompoundB
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_live2d_by_face);
-        container = (LinearLayout) findViewById(R.id.ll_face_container);
+        container = (LinearLayout) findViewById(R.id.ll_container);
 
         mGLSurfaceView = new Live2dGLSurfaceView(Live2dByFaceActivity.this);
         mGLSurfaceView.init(Live2dByFaceActivity.this, MODEL_PATH, TEXTURE_PATHS, 1, 1);
 
 
         container.addView(mGLSurfaceView);
-//        initCameraView();
+        initCameraView();
 
     }
     private void initCameraView() {

@@ -18,7 +18,7 @@ import java.util.Map;
 
 public class L2DBaseModel {
     // モデル関連
-    protected ALive2DModel live2DModel = null;    // Live2Dモデルクラス
+    protected ALive2DModel live2DModel = null;    // Live2Dモデルクラス 模型类
     protected L2DModelMatrix modelMatrix = null;  // Live2Dモデラー上の座標系からワールド座標系へ変換するための行列  用于从Live 2D Modeler上的坐标系转换为世界坐标系的矩阵
 
     // モーション・状態管理
@@ -49,7 +49,7 @@ public class L2DBaseModel {
 
     public L2DBaseModel() {
         // モーションマネージャーを作成
-        mainMotionManager = new L2DMotionManager();// MotionQueueManagerクラスからの継承なので、使い方は同一
+        mainMotionManager = new L2DMotionManager();// MotionQueueManagerクラスからの継承なので、使い方は同一 由于它是从Motion Queue Manager类继承的，因此用法是相同的。
         expressionManager = new L2DMotionManager();
 
         motions = new HashMap<>();

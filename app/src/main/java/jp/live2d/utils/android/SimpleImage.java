@@ -61,7 +61,7 @@ public final class SimpleImage {
 
     /*
      * テクスチャの描画先の座標を設定(デフォルトは 0,0,1,1 に描かれる)
-     *
+     *设置绘制纹理的坐标（默认绘制为0,0,1,1）
      * @param left
      * @param right
      * @param bottom
@@ -75,7 +75,7 @@ public final class SimpleImage {
     }
 
     /*
-     * テクスチャの使用範囲を設定（テクスチャは0..1座標）
+     * テクスチャの使用範囲を設定（テクスチャは0..1座標）设置纹理的使用范围（纹理为0.1坐标）
      * @param left
      * @param right
      * @param bottom

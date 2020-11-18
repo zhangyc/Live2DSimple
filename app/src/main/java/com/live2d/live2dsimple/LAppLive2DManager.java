@@ -6,29 +6,20 @@
  */
 package com.live2d.live2dsimple;
 
-import android.app.Activity;
 import android.content.Context;
-import android.os.Build;
 import android.util.Log;
 
-import androidx.annotation.RequiresApi;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
-import com.google.android.gms.common.util.Predicate;
+import java.util.ArrayList;
+import java.util.Arrays;
+
+import javax.microedition.khronos.opengles.GL10;
 
 import jp.live2d.Live2D;
 import jp.live2d.framework.L2DViewMatrix;
 import jp.live2d.framework.Live2DFramework;
-
-import org.apache.commons.beanutils.BeanPropertyValueEqualsPredicate;
-import org.apache.commons.collections.CollectionUtils;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-
-import javax.microedition.khronos.opengles.GL10;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 /*
  *  LAppLive2DManagerは、Live2D関連の司令塔としてモデル、ビュー、イベント等を管理するクラス（のサンプル実装）になります。
@@ -96,6 +87,7 @@ public final class LAppLive2DManager {
     public final Context getApplicationContext() {
         return applicationContext;
     }
+
 
     private void releaseModel() {
         for (LAppModel model : models) {
@@ -227,7 +219,9 @@ public final class LAppLive2DManager {
         return null;
     }
 
-    public final int getModelNum() {
+
+    public final int getModelNum()
+    {
         return models.size();
     }
 
