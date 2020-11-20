@@ -44,14 +44,24 @@ public class Live2dByFaceActivity extends AppCompatActivity implements CompoundB
     protected final double[] emotion = new double[10];
 
     private String selectedModel = FACE_DETECTION;
+    private LinearLayout container2;
+    private Live2dGLSurfaceView mGLSurfaceView2;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_live2d_by_face);
         container = (LinearLayout) findViewById(R.id.ll_container);
+        container2 = (LinearLayout) findViewById(R.id.ll_container2);
+
         mGLSurfaceView = new Live2dGLSurfaceView(Live2dByFaceActivity.this);
+        mGLSurfaceView2 = new Live2dGLSurfaceView(Live2dByFaceActivity.this);
+        mGLSurfaceView.init(Live2dByFaceActivity.this, MODEL_PATH, TEXTURE_PATHS, 1, 1,_faceDetectorProcessor);
+        mGLSurfaceView2.init(Live2dByFaceActivity.this, MODEL_PATH, TEXTURE_PATHS, 1, 1,_faceDetectorProcessor);
         container.addView(mGLSurfaceView);
-        initCameraView();
+        container2.addView(mGLSurfaceView2);
+
+        //initCameraView();
 
     }
     private void initCameraView() {
@@ -153,6 +163,7 @@ public class Live2dByFaceActivity extends AppCompatActivity implements CompoundB
                             PreferenceUtils.getFaceDetectorOptionsForLivePreview(this);
                     _faceDetectorProcessor=new FaceDetectorProcessor(this, faceDetectorOptions);
                     mGLSurfaceView.init(Live2dByFaceActivity.this, MODEL_PATH, TEXTURE_PATHS, 1, 1,_faceDetectorProcessor);
+                    mGLSurfaceView2.init(Live2dByFaceActivity.this, MODEL_PATH, TEXTURE_PATHS, 1, 1,_faceDetectorProcessor);
 
                     cameraSource.setMachineLearningFrameProcessor(
                             _faceDetectorProcessor);

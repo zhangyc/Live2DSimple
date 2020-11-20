@@ -18,7 +18,12 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
+import java.nio.ShortBuffer;
 import java.util.Objects;
+import java.util.Random;
 
 /*
  * LAppRendererはモデル描画と、そのためのOpenGL命令を集約したクラスです。
@@ -29,9 +34,27 @@ public final class LAppRenderer implements GLSurfaceView.Renderer {
     private SimpleImage bg; // 背景の描画
     private float accelerationX = 0;
     private float accelerationY = 0;
-
+    private GLBitmap glBitmap;
+    FloatBuffer vertices;
+    ShortBuffer indices;
     LAppRenderer(LAppLive2DManager live2DMgr) {
         this.delegate = live2DMgr;
+        glBitmap = new GLBitmap();
+        ByteBuffer byteBuffer = ByteBuffer.allocateDirect(4 * 2 * 4);
+        byteBuffer.order(ByteOrder.nativeOrder());
+        vertices = byteBuffer.asFloatBuffer();
+        //定义四个点
+        vertices.put( new float[] {  -80,-120,
+                80,-120,
+                -80,120,
+                80,120});
+        ByteBuffer indicesBuffer = ByteBuffer.allocateDirect(6 * 2);
+        indicesBuffer.order(ByteOrder.nativeOrder());
+        indices = indicesBuffer.asShortBuffer();
+        indices.put(new short[] { 0, 1, 2, 1, 2, 3 });
+        //indices.flip() == indices.position(0)
+        indices.flip();
+        vertices.flip();
     }
 
     /*
@@ -40,12 +63,13 @@ public final class LAppRenderer implements GLSurfaceView.Renderer {
     @Override
     public final void onSurfaceCreated(GL10 context, EGLConfig arg1) {
         // 背景の作成
-        setupBackground(delegate.getApplicationContext(), context);
+       // setupBackground(delegate.getApplicationContext(), context);
     }
 
     /*
      * OpenGL画面の変更時に呼ばれるイベント。
      * 初期化時とActivity再開時に呼ばれる。
+     * 更改OpenGL屏幕时调用的事件。 *在初始化和重新启动Activity时调用。
      */
     @Override
     public final void onSurfaceChanged(GL10 gl, int width, int height) {
@@ -109,6 +133,7 @@ public final class LAppRenderer implements GLSurfaceView.Renderer {
 
             // 背景の描画
             if (bg != null) {
+
                 gl.glPushMatrix();
                 {
                     float SCALE_X = 0.25f; // デバイスの回転による揺れ幅
@@ -128,7 +153,6 @@ public final class LAppRenderer implements GLSurfaceView.Renderer {
                 }
             }
         }
-        gl.glPopMatrix();
     }
 
     public final void setAcceleration(float x, float y, float z) {
@@ -140,16 +164,24 @@ public final class LAppRenderer implements GLSurfaceView.Renderer {
      * 背景の設定
      * @param context
      */
+    Random random=new Random();
     private void setupBackground(@NotNull Context context, GL10 gl) {
+
         try {
+
             InputStream in = FileManager.open(context, LAppDefine.BACK_IMAGE_NAME);
             bg = new SimpleImage(gl, in);
             // 描画範囲。画面の最大表示範囲に合わせる
             bg.setDrawRect(
-                    LAppDefine.VIEW_LOGICAL_MAX_LEFT,
-                    LAppDefine.VIEW_LOGICAL_MAX_RIGHT,
-                    LAppDefine.VIEW_LOGICAL_MAX_BOTTOM,
-                    LAppDefine.VIEW_LOGICAL_MAX_TOP);
+                    LAppDefine.VIEW_LOGICAL_MAX_LEFT, //-2.0
+                    LAppDefine.VIEW_LOGICAL_MAX_RIGHT,  //2.0
+                    LAppDefine.VIEW_LOGICAL_MAX_BOTTOM,  //-2.0
+                    LAppDefine.VIEW_LOGICAL_MAX_TOP);    //2.0
+//            bg.setDrawRect(
+//                    0.1f, //-2.0
+//                    0.5f,  //2.0
+//                    0.1f,  //-2.0
+//                    0.5f);    //2.
 
             // 画像を使用する範囲(uv)
             bg.setUVRect(0.0f, 1.0f, 0.0f, 1.0f);

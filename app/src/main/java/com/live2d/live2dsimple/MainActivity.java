@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
@@ -228,8 +229,7 @@ public final class MainActivity extends Activity implements CompoundButton.OnChe
 
 
         // activity_main.xmlにLive2DのViewをレイアウトする
-        FrameLayout layout = findViewById(R.id.live2DLayout);
-
+        LinearLayout layout = findViewById(R.id.live2DLayout);
 
         layout.addView(lAppView, 0, new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 

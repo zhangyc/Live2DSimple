@@ -416,7 +416,7 @@ public final class LAppModel extends L2DBaseModel {
 
         if (alpha < 0.999) {
             // 半透明
-            // オフスクリーンにモデルを描画
+            // オフスクリーンにモデルを描画  在屏幕外绘制模型
             OffscreenImage.setOffscreen(gl);
             gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
             gl.glPushMatrix();

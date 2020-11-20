@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
+import android.view.KeyEvent;
 
 import com.live2d.live2dsimple.facedetector.facedetector.FaceDetectorProcessor;
 
@@ -35,8 +36,19 @@ public class Live2dGLSurfaceView extends GLSurfaceView {
 //                "live2d/haru/haru.1024/texture_02.png"
 //        };
 
+
         this.mLive2dRenderer = new Live2dRenderer();
-        this.mLive2dRenderer.setUpModel(activity, MODEL_PATH, TEXTURE_PATHS, wRatio, hRatio,faceDetectorProcessor);
         this.setRenderer(this.mLive2dRenderer);
+        queueEvent(new Runnable() {
+            @Override
+            public void run() {
+                mLive2dRenderer.setUpModel(activity, MODEL_PATH, TEXTURE_PATHS, wRatio, hRatio,faceDetectorProcessor);
+            }
+        });
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        return super.onKeyDown(keyCode, event);
     }
 }

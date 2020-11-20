@@ -60,7 +60,7 @@ public final class L2DEyeBlink {
     }
 
     /*
-     * モデルのパラメータを更新。
+     * モデルのパラメータを更新。更新了模型参数。
      * @param model
      */
     public final void updateParam(ALive2DModel model) {

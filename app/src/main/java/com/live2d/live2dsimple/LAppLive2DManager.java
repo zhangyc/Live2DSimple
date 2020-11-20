@@ -8,6 +8,7 @@ package com.live2d.live2dsimple;
 
 import android.app.Activity;
 import android.content.Context;
+import android.opengl.GLSurfaceView;
 import android.util.Log;
 import jp.live2d.Live2D;
 import jp.live2d.framework.L2DViewMatrix;
@@ -18,6 +19,10 @@ import org.jetbrains.annotations.NotNull;
 import javax.microedition.khronos.opengles.GL10;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Random;
 
 /*
  *  LAppLive2DManagerは、Live2D関連の司令塔としてモデル、ビュー、イベント等を管理するクラス（のサンプル実装）になります。
@@ -47,11 +52,52 @@ public final class LAppLive2DManager {
     private int modelCount = -1;
     private boolean reloadFlg; // モデル再読み込みのフラグ        模型重载标志
 
+    List<LAppView> views=new ArrayList();  ///把所有创建的view添加到map中进行管理
+    ///
     public LAppLive2DManager(@NotNull Context applicationContext) {
         this.applicationContext = applicationContext;
         Live2D.init();
         Live2DFramework.setPlatformManager(new PlatformManager());
         models = new ArrayList<>();
+        manageModelPlay();
+    }
+    boolean loop=true;
+    Random random=new Random();
+    private void manageModelPlay() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (loop){
+                    int length=views.size();
+                    if (length==0){
+                        return;
+                    }
+                    if (length==1){
+                        views.get(0).setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
+                        views.get(0).onResume();
+                    }
+                    if (length>1){
+                        for (LAppView lAppView:
+                              views) {
+                            lAppView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+                        }
+                        int index=random.nextInt(length);
+                       for (int i=0;i<length;i++){
+                           if (i==index){
+                               views.get(i).setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
+                               views.get(i).onResume();
+                           }else {
+                               views.get(i).setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+                               views.get(i).onPause();
+                           }
+                       }
+                    }
+
+                }
+
+
+            }
+        }).start();
     }
 
     @Contract(pure = true)
@@ -163,7 +209,10 @@ public final class LAppLive2DManager {
         view = new LAppView(activity);
         ///为当前的view设置工具类
         view.setLive2DManager(this);
+        view.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
         view.startAcceleration(activity);
+        ///把创建的view加入一个集合中。因为需要遍历渲染。
+        views.add(view);
         return view;
     }
 
