@@ -7,6 +7,7 @@
 package com.live2d.live2dsimple;
 
 import android.content.Context;
+import android.opengl.GLSurfaceView;
 import android.util.Log;
 
 import org.jetbrains.annotations.Contract;
@@ -14,6 +15,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
 
 import javax.microedition.khronos.opengles.GL10;
 
@@ -79,9 +82,47 @@ public final class LAppLive2DManager {
         Live2D.init();
         Live2DFramework.setPlatformManager(new PlatformManager());
         models = new ArrayList<>();
-        modelNameList = new ArrayList<>();
+        manageModelPlay();
     }
+    List<LAppView> views=new ArrayList();  ///把所有创建的view添加到map中进行管理
+    boolean loop=true;
+    Random random=new Random();
+    private void manageModelPlay() {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while (loop){
+                    int length=views.size();
+                    if (length==0){
+                        return;
+                    }
+                    if (length==1){
+                        views.get(0).setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
+                        views.get(0).onResume();
+                    }
+                    if (length>1){
+                        for (LAppView lAppView:
+                              views) {
+                            lAppView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+                        }
+                        int index=random.nextInt(length);
+                       for (int i=0;i<length;i++){
+                           if (i==index){
+                               views.get(i).setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
+                               views.get(i).onResume();
+                           }else {
+                               views.get(i).setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+                               views.get(i).onPause();
+                           }
+                       }
+                    }
 
+                }
+
+
+            }
+        }).start();
+    }
 
     @Contract(pure = true)
     public final Context getApplicationContext() {
