@@ -71,14 +71,6 @@ public final class LAppView extends GLSurfaceView {
         }
     };
 
-    public L2DTargetPoint getDragMgr() {
-        return dragMgr;
-    }
-
-    public void setDragMgr(L2DTargetPoint dragMgr) {
-        this.dragMgr = dragMgr;
-    }
-
     private L2DTargetPoint dragMgr; // ドラッグによるアニメーションの管理  拖动管理
     private GestureDetector gestureDetector; ///手势检测器
 
@@ -110,8 +102,7 @@ public final class LAppView extends GLSurfaceView {
 
         // タッチ関係のイベント管理
         touchMgr = new TouchManager();
-        dragMgr = L2DTargetPoint.getInstance();
-        setDragMgr(dragMgr);
+        dragMgr = new L2DTargetPoint();
     }
 
     public final void startAcceleration(Context activity) {

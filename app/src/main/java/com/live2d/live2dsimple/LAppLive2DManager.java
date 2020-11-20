@@ -43,10 +43,6 @@ public final class LAppLive2DManager {
     // ログ用タグ
     private static final String TAG = "SampleLive2DManager";
 
-    public void setModelNameList(ArrayList<LSImpleModel> modelNameList) {
-        this.modelNameList = modelNameList;
-
-    }
     public void addLSimpleModel(LSImpleModel lsImpleModel) {
         this.modelNameList.add(lsImpleModel);
 
@@ -62,7 +58,7 @@ public final class LAppLive2DManager {
         this.bgImgPath = bgImgPath;
     }
 
-    private  ArrayList<LSImpleModel> modelNameList;
+    private  ArrayList<LSImpleModel> modelNameList=new ArrayList<>();
     // アプリケーションコンテキスト
     private Context applicationContext;
     // モデル表示用View  ///模型显示
@@ -151,11 +147,6 @@ public final class LAppLive2DManager {
      */
     public final void update(GL10 gl) {
         view.update();
-        if (modelNameList.isEmpty()){
-            return;
-        }
-
-
         int length=modelNameList.size();
         int modelsLength=models.size();
         if (modelsLength!=length){
@@ -171,6 +162,8 @@ public final class LAppLive2DManager {
         }else {
             return;
         }
+
+
 
 
 
@@ -282,7 +275,10 @@ public final class LAppLive2DManager {
         view = new LAppView(activity);
         ///为当前的view设置工具类
         view.setLive2DManager(this);
+        view.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
         view.startAcceleration(activity);
+        ///把创建的view加入一个集合中。因为需要遍历渲染。
+        views.add(view);
         return view;
     }
 

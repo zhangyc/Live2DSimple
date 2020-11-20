@@ -9,23 +9,12 @@ package jp.live2d.framework;
 import jp.live2d.util.UtSystem;
 
 public final class L2DTargetPoint {
-    // 饱汉
-// UnThreadSafe
-    private static L2DTargetPoint singleton = null;
-    public L2DTargetPoint() {
-    }
-    public static L2DTargetPoint getInstance() {
-        if (singleton == null) {
-            singleton = new L2DTargetPoint();
-        }
-        return singleton;
-    }
     private static final int FRAME_RATE = 30; // ドラッグの距離計算にのみ使う擬似フレームレート
 
     private float faceTargetX = 0; // 顔の向きの目標値（この値に近づいていく）
     private float faceTargetY = 0;
 
-    private float faceX = 0; // 顔の向き -1..1   脸部朝向-1..1
+    private float faceX = 0; // 顔の向き -1..1
     private float faceY = 0;
 
     private float faceVX = 0; // 顔の向きの変化速度

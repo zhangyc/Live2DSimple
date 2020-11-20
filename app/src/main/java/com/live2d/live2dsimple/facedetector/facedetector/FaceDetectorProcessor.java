@@ -23,29 +23,18 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 
 import com.google.android.gms.tasks.Task;
-import com.google.mlkit.common.MlKitException;
 import com.google.mlkit.vision.common.InputImage;
-
 import com.google.mlkit.vision.face.Face;
-import com.google.mlkit.vision.face.FaceContour;
 import com.google.mlkit.vision.face.FaceDetection;
 import com.google.mlkit.vision.face.FaceDetector;
 import com.google.mlkit.vision.face.FaceDetectorOptions;
 import com.google.mlkit.vision.face.FaceLandmark;
-import com.live2d.live2dsimple.LAppDefine;
 import com.live2d.live2dsimple.LAppLive2DManager;
 import com.live2d.live2dsimple.facedetector.VisionProcessorBase;
-import com.live2d.live2dsimple.utils.FrameMetadata;
 import com.live2d.live2dsimple.utils.GraphicOverlay;
 
-import java.nio.ByteBuffer;
 import java.util.List;
 import java.util.Locale;
-import java.util.Random;
-
-import jp.live2d.ALive2DModel;
-import jp.live2d.framework.L2DStandardID;
-import jp.live2d.framework.L2DTargetPoint;
 
 /** Face Detector Demo. */
 public class FaceDetectorProcessor extends VisionProcessorBase<List<Face>> {
