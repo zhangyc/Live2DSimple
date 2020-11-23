@@ -1,4 +1,4 @@
-package com.live2d.live2dsimple.facedetector.view;
+package com.live2d.live2dsimple.view;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;

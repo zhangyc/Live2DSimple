@@ -1,4 +1,4 @@
-package com.live2d.live2dsimple.facedetector.view;
+package com.live2d.live2dsimple.view;
 
 import android.app.Activity;
 import android.content.Context;
@@ -6,7 +6,6 @@ import android.opengl.GLSurfaceView;
 import android.util.AttributeSet;
 import android.view.KeyEvent;
 
-import com.live2d.live2dsimple.facedetector.facedetector.FaceDetectorProcessor;
 
 public class Live2dGLSurfaceView extends GLSurfaceView {
 
@@ -28,7 +27,7 @@ public class Live2dGLSurfaceView extends GLSurfaceView {
     }
 
     public void init(Activity activity, String MODEL_PATH, String[] TEXTURE_PATHS,
-                     float wRatio, float hRatio, FaceDetectorProcessor faceDetectorProcessor) {
+                     float wRatio, float hRatio) {
 //        final String MODEL_PATH = "live2d/haru/haru.moc";
 //        final String[] TEXTURE_PATHS = {
 //                "live2d/haru/haru.1024/texture_00.png",
@@ -42,7 +41,7 @@ public class Live2dGLSurfaceView extends GLSurfaceView {
         queueEvent(new Runnable() {
             @Override
             public void run() {
-                mLive2dRenderer.setUpModel(activity, MODEL_PATH, TEXTURE_PATHS, wRatio, hRatio,faceDetectorProcessor);
+                mLive2dRenderer.setUpModel(activity, MODEL_PATH, TEXTURE_PATHS, wRatio, hRatio);
             }
         });
     }

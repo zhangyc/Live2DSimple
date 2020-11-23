@@ -1,10 +1,8 @@
-package com.live2d.live2dsimple.facedetector.view;
+package com.live2d.live2dsimple.view;
 
 import android.app.Activity;
 import android.opengl.GLSurfaceView;
 import android.util.Log;
-
-import com.live2d.live2dsimple.facedetector.facedetector.FaceDetectorProcessor;
 
 import java.io.InputStream;
 
