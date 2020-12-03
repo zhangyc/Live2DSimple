@@ -13,7 +13,7 @@ import jp.live2d.android.Live2DModelAndroid;
 import jp.live2d.android.UtOpenGL;
 import jp.live2d.framework.L2DEyeBlink;
 
-public class Live2dRenderer2 implements GLSurfaceView.Renderer {
+public class Live2dRenderer3 implements GLSurfaceView.Renderer {
     private Activity mActivity;
 
     private Live2DModelAndroid live2DModel;
@@ -24,9 +24,10 @@ public class Live2dRenderer2 implements GLSurfaceView.Renderer {
     private String[] TEXTURE_PATHS;
 
     private float wRatio, hRatio;
+    public boolean can;
 
 
-    public Live2dRenderer2(Activity activity, String MODEL_PATH, String[] TEXTURE_PATHS,
+    public Live2dRenderer3(Activity activity, String MODEL_PATH, String[] TEXTURE_PATHS,
                            float wRatio, float hRatio) {
         this.mActivity = activity;
         this.MODEL_PATH = MODEL_PATH;
@@ -52,7 +53,6 @@ public class Live2dRenderer2 implements GLSurfaceView.Renderer {
         }
     }
 
-    public boolean can;
 
     @Override
     public void onDrawFrame(GL10 gl)
@@ -66,8 +66,8 @@ public class Live2dRenderer2 implements GLSurfaceView.Renderer {
         mEyeBlink.updateParam(live2DModel);
         //live2DModel.saveParam();
         ///通过activity的值来更新
-
         live2DModel.setGL(gl);
+
         if (can){
             live2DModel.update();
 

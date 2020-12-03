@@ -59,45 +59,6 @@ public final class LAppLive2DManager {
         Live2D.init();
         Live2DFramework.setPlatformManager(new PlatformManager());
         models = new ArrayList<>();
-        manageModelPlay();
-    }
-    boolean loop=true;
-    Random random=new Random();
-    private void manageModelPlay() {
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (loop){
-                    int length=views.size();
-                    if (length==0){
-                        return;
-                    }
-                    if (length==1){
-                        views.get(0).setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
-                        views.get(0).onResume();
-                    }
-                    if (length>1){
-                        for (LAppView lAppView:
-                              views) {
-                            lAppView.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
-                        }
-                        int index=random.nextInt(length);
-                       for (int i=0;i<length;i++){
-                           if (i==index){
-                               views.get(i).setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
-                               views.get(i).onResume();
-                           }else {
-                               views.get(i).setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
-                               views.get(i).onPause();
-                           }
-                       }
-                    }
-
-                }
-
-
-            }
-        }).start();
     }
 
     @Contract(pure = true)

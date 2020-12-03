@@ -13,7 +13,7 @@ import jp.live2d.android.Live2DModelAndroid;
 import jp.live2d.android.UtOpenGL;
 import jp.live2d.framework.L2DEyeBlink;
 
-public class Live2dRenderer2 implements GLSurfaceView.Renderer {
+public class Live2dRenderer1 implements GLSurfaceView.Renderer {
     private Activity mActivity;
 
     private Live2DModelAndroid live2DModel;
@@ -26,7 +26,7 @@ public class Live2dRenderer2 implements GLSurfaceView.Renderer {
     private float wRatio, hRatio;
 
 
-    public Live2dRenderer2(Activity activity, String MODEL_PATH, String[] TEXTURE_PATHS,
+    public Live2dRenderer1(Activity activity, String MODEL_PATH, String[] TEXTURE_PATHS,
                            float wRatio, float hRatio) {
         this.mActivity = activity;
         this.MODEL_PATH = MODEL_PATH;
@@ -57,22 +57,20 @@ public class Live2dRenderer2 implements GLSurfaceView.Renderer {
     @Override
     public void onDrawFrame(GL10 gl)
     {
-        gl.glMatrixMode(GL10.GL_MODELVIEW);
-        gl.glLoadIdentity();
-        gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
-        //live2DModel.loadParam();
-        //boolean update = mMotionManager.updateParam(live2DModel);
-        mEyeBlink.updateParam(live2DModel);
         //live2DModel.saveParam();
         ///通过activity的值来更新
 
-        live2DModel.setGL(gl);
         if (can){
+            gl.glMatrixMode(GL10.GL_MODELVIEW);
+            gl.glLoadIdentity();
+            gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+            mEyeBlink.updateParam(live2DModel);
+            live2DModel.setGL(gl);
             live2DModel.update();
+            live2DModel.draw();
 
         }
-        live2DModel.draw();
 
     }
 
