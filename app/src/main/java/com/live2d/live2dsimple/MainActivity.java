@@ -26,6 +26,7 @@ public final class MainActivity extends Activity {
         // オブジェクトを初期化
         live2DMgr = new LAppLive2DManager(this.getApplicationContext());
         // GUIを初期化
+        setupGUI();
 
 
     }

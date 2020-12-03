@@ -99,7 +99,7 @@ public final class LAppLive2DManager {
                         releaseModel();
 
                         models.add(new LAppModel());
-                        models.get(0).load(applicationContext, gl, LAppDefine.MODEL_HARU);
+                        models.get(0).load(applicationContext, gl, LAppDefine.MODEL_HARU1);
                         models.get(0).feedIn();
                         break;
                     case 1: // しずく

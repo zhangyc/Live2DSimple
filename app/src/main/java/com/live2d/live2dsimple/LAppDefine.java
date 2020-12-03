@@ -33,6 +33,8 @@ public final class LAppDefine {
 
     // モデル定義
     public static final String MODEL_HARU = "live2d/haru/haru.model.json";
+    public static final String MODEL_HARU1 = "live2d/model01/model01.model.json";
+
     public static final String MODEL_HARU_A = "live2d/haru/haru_01.model.json";
     public static final String MODEL_HARU_B = "live2d/haru/haru_02.model.json";
     public static final String MODEL_SHIZUKU = "live2d/shizuku/shizuku.model.json";

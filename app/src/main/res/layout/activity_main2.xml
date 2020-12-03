@@ -11,16 +11,6 @@
         android:layout_height="0dp"
         android:layout_weight="1"
         android:id="@+id/gl1"/>
-    <android.opengl.GLSurfaceView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:id="@+id/gl2"/>
-    <android.opengl.GLSurfaceView
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:id="@+id/gl3"/>
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

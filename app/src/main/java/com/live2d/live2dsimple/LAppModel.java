@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.FloatBuffer;
 import java.util.HashMap;
+import java.util.Random;
 
 /*
  * LAppModel は低レベルのLive2Dモデル定義クラス Live2DModelAndroid をラップし       * LAppModel包装了底层Live2D模型定义类Live2DModelAndroid
@@ -172,7 +173,7 @@ public final class LAppModel extends L2DBaseModel {
             motion.setFadeOut(modelSetting.getMotionFadeOut(name, i));
         }
     }
-
+    Random random=new Random();
     public final void update(@NotNull Context applicationContext) {
         if (live2DModel == null) {
             if (LAppDefine.DEBUG_LOG)
@@ -223,6 +224,9 @@ public final class LAppModel extends L2DBaseModel {
         // 加速度による変化
         live2DModel.addToParamFloat(L2DStandardID.PARAM_ANGLE_Z, 90 * accelerationX, 0.5f);
 
+
+        live2DModel.setParamFloat(L2DStandardID.PARAM_EYE_R_OPEN,random.nextFloat(), 0.75f);
+        live2DModel.setParamFloat(L2DStandardID.PARAM_EYE_L_OPEN,random.nextFloat(), 0.75f);
         if (physics != null)
             physics.updateParam(live2DModel); // 物理演算でパラメータ更新
 

@@ -61,16 +61,13 @@ public class Live2dRenderer1 implements GLSurfaceView.Renderer {
         //live2DModel.saveParam();
         ///通过activity的值来更新
 
-        if (can){
-            gl.glMatrixMode(GL10.GL_MODELVIEW);
-            gl.glLoadIdentity();
-            gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
-            mEyeBlink.updateParam(live2DModel);
-            live2DModel.setGL(gl);
-            live2DModel.update();
-            live2DModel.draw();
-
-        }
+        gl.glMatrixMode(GL10.GL_MODELVIEW);
+        gl.glLoadIdentity();
+        gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+        mEyeBlink.updateParam(live2DModel);
+        live2DModel.setGL(gl);
+        live2DModel.update();
+        live2DModel.draw();
 
     }
 
