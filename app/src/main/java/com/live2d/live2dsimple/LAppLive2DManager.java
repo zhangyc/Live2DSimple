@@ -170,7 +170,7 @@ public final class LAppLive2DManager {
         view = new LAppView(activity);
         ///为当前的view设置工具类
         view.setLive2DManager(this);
-        view.setRenderMode(GLSurfaceView.RENDERMODE_WHEN_DIRTY);
+        view.setRenderMode(GLSurfaceView.RENDERMODE_CONTINUOUSLY);
         view.startAcceleration(activity);
         ///把创建的view加入一个集合中。因为需要遍历渲染。
         views.add(view);

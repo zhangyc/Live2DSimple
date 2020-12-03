@@ -5,6 +5,7 @@ import android.opengl.GLSurfaceView;
 import android.util.Log;
 
 import java.io.InputStream;
+import java.util.Random;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
@@ -12,6 +13,7 @@ import javax.microedition.khronos.opengles.GL10;
 import jp.live2d.android.Live2DModelAndroid;
 import jp.live2d.android.UtOpenGL;
 import jp.live2d.framework.L2DEyeBlink;
+import jp.live2d.framework.L2DStandardID;
 
 public class Live2dRenderer1 implements GLSurfaceView.Renderer {
     private Activity mActivity;
@@ -53,7 +55,7 @@ public class Live2dRenderer1 implements GLSurfaceView.Renderer {
     }
 
     public boolean can;
-
+   Random random=new Random();
     @Override
     public void onDrawFrame(GL10 gl)
     {
@@ -65,8 +67,15 @@ public class Live2dRenderer1 implements GLSurfaceView.Renderer {
         gl.glLoadIdentity();
         gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
         mEyeBlink.updateParam(live2DModel);
+
         live2DModel.setGL(gl);
+
         live2DModel.update();
+        live2DModel.addToParamFloat(L2DStandardID.PARAM_EYE_BALL_X,random.nextFloat(), 0.75f);
+        live2DModel.addToParamFloat(L2DStandardID.PARAM_EYE_BALL_Y,random.nextFloat(), 0.75f);
+        live2DModel.addToParamFloat(L2DStandardID.PARAM_EYE_BALL_FORM,random.nextFloat(), 0.75f);
+
+
         live2DModel.draw();
 
     }
