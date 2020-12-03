@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.FloatBuffer;
 import java.util.HashMap;
+import java.util.Random;
 
 /*
  * LAppModel は低レベルのLive2Dモデル定義クラス Live2DModelAndroid をラップし       * LAppModel包装了底层Live2D模型定义类Live2DModelAndroid
@@ -198,7 +199,7 @@ public final class LAppModel extends L2DBaseModel {
             motion.setFadeOut(modelSetting.getMotionFadeOut(name, i));
         }
     }
-
+    Random random=new Random();
     public final void update(@NotNull Context applicationContext,RealFaceBean faceBean) {
         if (live2DModel == null) {
             if (LAppDefine.DEBUG_LOG)
@@ -251,22 +252,17 @@ public final class LAppModel extends L2DBaseModel {
 
 
 
+
+
+
+
         //实时面部追踪---下周来了继续
         if (faceBean!=null){
             live2DModel.setParamFloat(L2DStandardID.PARAM_ANGLE_Z, faceBean.getAngle_z(), 0.75f);
             live2DModel.setParamFloat(L2DStandardID.PARAM_ANGLE_X , faceBean.getAngle_x(), 0.75f);
             live2DModel.setParamFloat(L2DStandardID.PARAM_ANGLE_Y , faceBean.getAngle_y(), 0.75f);
 
-            if (faceBean.getRightEyeOpenProbability()>0.98f){
-                live2DModel.setParamFloat(L2DStandardID.PARAM_EYE_R_OPEN,1.0f, 0.75f);
-            }else if (faceBean.getRightEyeOpenProbability()<0.1f){
-                live2DModel.setParamFloat(L2DStandardID.PARAM_EYE_R_OPEN,0.0f, 0.75f);
-            }
-            if (faceBean.getLeftEyeOpenProbability()>0.98f){
-                live2DModel.setParamFloat(L2DStandardID.PARAM_EYE_L_OPEN,1.0f, 0.75f);
-            }else if (faceBean.getRightEyeOpenProbability()<0.1f){
-                live2DModel.setParamFloat(L2DStandardID.PARAM_EYE_L_OPEN,0.0f, 0.75f);
-            }
+
             live2DModel.setParamFloat(L2DStandardID.PARAM_MOUTH_OPEN_Y, faceBean.getMouthHeight(), 0.75f);
             live2DModel.setParamFloat(L2DStandardID.PARAM_MOUTH_FORM, faceBean.getMouthHeight(), 0.75f);
         }
