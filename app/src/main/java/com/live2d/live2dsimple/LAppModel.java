@@ -23,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.FloatBuffer;
 import java.util.HashMap;
+import java.util.Random;
 
 /*
  * LAppModel は低レベルのLive2Dモデル定義クラス Live2DModelAndroid をラップし
@@ -171,7 +172,7 @@ public final class LAppModel extends L2DBaseModel {
             motion.setFadeOut(modelSetting.getMotionFadeOut(name, i));
         }
     }
-
+   Random random=new Random();
     public final void update(@NotNull Context applicationContext) {
         if (live2DModel == null) {
             if (LAppDefine.DEBUG_LOG)
@@ -218,6 +219,10 @@ public final class LAppModel extends L2DBaseModel {
         live2DModel.addToParamFloat(L2DStandardID.PARAM_ANGLE_Z, (float) (10 * Math.sin(t / 5.5345)), 0.5f);
         live2DModel.addToParamFloat(L2DStandardID.PARAM_BODY_ANGLE_X, (float) (4 * Math.sin(t / 15.5345)), 0.5f);
         live2DModel.setParamFloat(L2DStandardID.PARAM_BREATH, (float) (0.5f + 0.5f * Math.sin(t / 3.2345)), 1);
+        //眼球
+        
+        live2DModel.setParamFloat(L2DStandardID.PARAM_EYE_BALL_X,random.nextFloat()
+                , 1);
 
         // 加速度による変化
         live2DModel.addToParamFloat(L2DStandardID.PARAM_ANGLE_Z, 90 * accelerationX, 0.5f);
